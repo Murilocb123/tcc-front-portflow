@@ -1,0 +1,161 @@
+<div class="login-content">
+    <p-panel showHeader="false">
+        <div class="flex flex-column items-center">
+            <!-- logo no centro  -->
+            <div class="logo">
+                <img src="logo.jpg" alt="Logo" />
+            </div>
+            <div class="tab-section">
+                <div
+                    class="tab-item"
+                    [ngClass]="{ active: tabActive === TabActive.LOGIN }"
+                    (click)="setTabActive(TabActive.LOGIN)"
+                >
+                    Login
+                </div>
+                <div class="tab-divider"></div>
+                <div
+                    class="tab-item"
+                    [ngClass]="{ active: tabActive === TabActive.REGISTER }"
+                    (click)="setTabActive(TabActive.REGISTER)"
+                >
+                    Cadastrar-se
+                </div>
+            </div>
+            <form
+                *ngIf="tabActive === TabActive.LOGIN"
+                autocomplete="true"
+                class="form-container"
+                [formGroup]="loginFormGroup"
+                [@tabsAnimations]
+                (ngSubmit)="login()"
+            >
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <input
+                            formControlName="email"
+                            pInputText
+                            id="email"
+                            type="email"
+                            autocomplete="true"
+                            class="w-full"
+                            pSize="large"
+                        />
+                        <label for="email">E-mail</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputLogin('email')" size="small" variant="simple" severity="error">{{ getErrorMessageLogin('email') }}</p-message>
+                </div>
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <p-password
+                            formControlName="password"
+                            inputId="password"
+                            [feedback]="false"
+                            toggleMask="true"
+                            styleClass="w-full"
+                            inputStyleClass="w-full"
+                            size="large"
+                        />
+                        <label for="password">Senha</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputLogin('password')" size="small" variant="simple" severity="error">{{ getErrorMessageLogin('password') }}</p-message>
+                    <a class="forgot-password" href="#">Esqueceu sua senha?</a>
+                </div>
+                <div class="subimit-button form-div">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Entrar"
+                        class="w-full button"
+                        size="large"
+                        [disabled]="!loginFormGroup.valid"
+                    ></button>
+                </div>
+            </form>
+            <form
+                autocomplete="true"
+                class="form-container"
+                *ngIf="tabActive === TabActive.REGISTER"
+                [formGroup]="registerFormGroup"
+                [@tabsAnimations]
+                (ngSubmit)="register()"
+            >
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <input
+                            formControlName="username"
+                            pInputText
+                            id="username"
+                            type="text"
+                            autocomplete="true"
+                            class="w-full"
+                            pSize="large"
+                        />
+                        <label for="username">Nome de usuário</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputRegister('username')" size="small" variant="simple" severity="error">{{ getErrorMessageRegister('username') }}</p-message>
+                </div>
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <input
+                            formControlName="email"
+                            pInputText
+                            id="email"
+                            type="email"
+                            autocomplete="true"
+                            class="w-full"
+                            pSize="large"
+                        />
+                        <label for="email">E-mail</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputRegister('email')" size="small" variant="simple" severity="error">{{ getErrorMessageRegister('email') }}</p-message>
+                </div>
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <p-password
+                            formControlName="password"
+                            inputId="password"
+                            promptLabel="Nivel de segurança da senha"
+                            toggleMask="true"
+                            weakLabel="Fraca"
+                            mediumLabel="Médio"
+                            strongLabel="Forte"
+                            styleClass="w-full"
+                            [mediumRegex]="MEDIUM_REGEX"
+                            [strongRegex]="STRONG_REGEX"
+                            inputStyleClass="w-full"
+                            size="large"
+                        />
+                        <label for="password">Senha</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputRegister('password')" size="small" variant="simple" severity="error">{{ getErrorMessageRegister('password') }}</p-message>
+                </div>
+                <div class="field form-div">
+                    <p-floatLabel>
+                        <p-password
+                            formControlName="confirmPassword"
+                            inputId="confirmPassword"
+                            [feedback]="false"
+                            toggleMask="true"
+                            styleClass="w-full"
+                            inputStyleClass="w-full"
+                            size="large"
+                        />
+                        <label for="confirmPassword">Confirmar senha</label>
+                    </p-floatLabel>
+                    <p-message *ngIf="isInvalidInputRegister('confirmPassword')" size="small" variant="simple" severity="error  ">{{ getErrorMessageRegister('confirmPassword') }}</p-message>
+                </div>
+                <div class="subimit-button form-div">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Cadastrar"
+                        class="w-full button"
+                        size="large"
+                        [disabled]="!registerFormGroup.valid"
+                    ></button>
+                </div>
+            </form>
+        </div>
+    </p-panel>
+</div>
