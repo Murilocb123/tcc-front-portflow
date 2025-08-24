@@ -9,9 +9,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { StrategyComponent } from './strategy/strategy.component';
 
 @NgModule({
-    declarations: [LoginAndRegisterComponent],
+    declarations: [LoginAndRegisterComponent, DashboardComponent, StrategyComponent],
     imports: [
         CommonModule,
         ButtonModule,

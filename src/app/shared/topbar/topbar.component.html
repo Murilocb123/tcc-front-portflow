@@ -1,24 +1,72 @@
-  <header class="topbar" role="navigation" aria-label="Menu superior">
+<header class="topbar" role="navigation" aria-label="Menu superior">
     <div class="topbar__wrap">
-      <div class="topbar__brand">
-        <!-- título/branding do app -->
-        <img src="logo.jpg" alt="Logo" />
-      </div>
-
-      <nav class="topbar__nav" aria-label="Ações rápidas">
-        <!-- adicione botão de ver notificação do primeng -->
-        <div class="topbar__left_item">
-          <button pButton icon="pi pi-bell" class="notification-button" aria-label="Notificações"></button>
+        <div class="topbar__brand">
+            <!-- título/branding do app -->
+            <img src="logo.jpg" alt="Logo" />
         </div>
 
-<!--         
-        <a class="topbar__link"
-           *ngFor="let it of items"
-           [routerLink]="it.route"
-           routerLinkActive="is-active"
-           [routerLinkActiveOptions]="{ exact: it.route === '/dashboard' }">
-          {{ it.label }}
-        </a> -->
-      </nav>
+        <nav class="topbar__nav" aria-label="Ações rápidas">
+            <div class="topbar__left_item">
+                <p-overlaybadge value="2" badgeSize="small">
+                    <button
+                        #notificationButton
+                        pButton
+                        icon="pi pi-bell"
+                        class="notification-button"
+                        aria-label="Notificações"
+                        (click)="openNotificationPanel($event)"
+                    ></button>
+                </p-overlaybadge>
+                <!-- um botão com nome e email do usuario logado e foto de perfil com components do primeng com bordas arredondadas -->
+                <button pButton class="user-info">
+                    <p-avatar
+                        image="https://i.pravatar.cc/150?img=3"
+                        shape="circle"
+                        styleClass="mr-2"
+                    ></p-avatar>
+                    <span class="user-name">Murilo Silva</span>
+                </button>
+            </div>
+        </nav>
     </div>
-  </header>
+</header>
+
+<p-popover #popover>
+    <div class="gap-4">
+        <div>
+            <span class="font-medium block mb-2">Notificações</span>
+            <ul
+                class="list-none p-0 m-0"
+                *ngIf="notifications.length; else noNotifications"
+            >
+                <li
+                    *ngFor="let notification of notifications; let last = last"
+                    class="flex items-center gap-2 p-2 hover:bg-emphasis cursor-pointer rounded-border"
+                    [ngStyle]="
+                        !last
+                            ? {
+                                  'border-bottom': '1px solid #e0e0e0'
+                              }
+                            : {}
+                    "
+                >
+                    <div>
+                        <span class="font-medium">{{
+                            notification.title
+                        }}</span>
+                        <div
+                            class="text-sm text-surface-500 dark:text-surface-400"
+                        >
+                            {{ notification.message }}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ng-template #noNotifications>
+                <div class="text-sm text-surface-500 dark:text-surface-400">
+                    Nenhuma notificação
+                </div>
+            </ng-template>
+        </div>
+    </div></p-popover
+>

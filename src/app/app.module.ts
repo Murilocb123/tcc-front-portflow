@@ -9,10 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeaturesModule } from './features/features.module';
-import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { TopbarComponent } from './shared/topbar/topbar.component';
-import { ButtonModule } from 'primeng/button';
+import { SharedModule } from './shared/shared.module';
 
 const MyTheme = definePreset(Aura, {
     semantic: {
@@ -28,13 +25,8 @@ const MyTheme = definePreset(Aura, {
 });
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        MainLayoutComponent,
-        NavbarComponent,
-        TopbarComponent,
-    ],
-    imports: [BrowserModule, AppRoutingModule, FeaturesModule, ButtonModule],
+    declarations: [AppComponent],
+    imports: [BrowserModule, AppRoutingModule, FeaturesModule, SharedModule],
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideAnimationsAsync(),
@@ -45,7 +37,7 @@ const MyTheme = definePreset(Aura, {
                 // add this
                 preset: MyTheme, // add this
                 options: {
-                    darkModeSelector: true,
+                    darkModeSelector: false,
                 },
             }, // add this
         }), // add this

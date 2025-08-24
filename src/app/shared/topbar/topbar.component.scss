@@ -48,20 +48,7 @@ $brand-logo-size: 44px;
         align-items: center;
         height: calc(var(--topbar-h) - 2px);
         padding: 0 0.75rem;
-        color: var(--nav-fg);
-        text-decoration: none;
-        border-bottom: 2px solid transparent;
-        transition: color 0.15s ease, border-color 0.15s ease,
-            background 0.15s ease;
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        &.is-active {
-            border-bottom-color: var(--nav-active);
-            color: #fff;
-        }
+        gap: 0.5rem;
     }
 }
 
@@ -70,13 +57,25 @@ $brand-logo-size: 44px;
     width: 48px;
     height: 48px;
     background-color: #fff;
-    border: none;
-    color: var(--nav-fg);
+    color: #334155;
+    border-color: transparent;
+
     //sombra ao redor distribuida igualmente
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.3);
-    &:hover {
-        border: none;
-        background-color: var(--nav-active);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    border-radius: 9999px;
+    border-color: transparent;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.3);
+    height: 48px;
+    padding: 0 0.75rem;
+    color: #334155;
+    background-color: #fff;
+    .user-name {
+        font-weight: bold;
     }
 }
 
