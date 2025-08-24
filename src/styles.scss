@@ -6,5 +6,22 @@
 
 html, body {
     font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+  --nav-w: 240px;              /* largura do menu (atualizada via JS) */
+  --nav-w-collapsed: 80px;
+  --nav-current: var(--nav-w); // será atualizado via TS da sidebar
+  --topbar-h: 80px;
+
+  --nav-bg: var(--p-content-background);           /* slate-900 */
+  --nav-fg: var(--p-text-color);           /* gray-200 */
+  --nav-fg-dim: var(--p-text-color-dim);       /* gray-400 */
+  --nav-active: var(--p-primary-color);       /* blue-400 */
+  --layout-background-light: #E1E9F9;   
+  --secondary-color: #088C4F;
 }
 

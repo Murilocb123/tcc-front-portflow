@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginAndRegisterComponent } from './features/login-and-register/login-and-register.component';
+import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
 
 export const routes: Routes = [
     {
@@ -12,6 +13,10 @@ export const routes: Routes = [
         path: 'login',
         component: LoginAndRegisterComponent,
     },
+    {
+        path: 'main',
+        component: MainLayoutComponent,
+    }
 ];
 
 @NgModule({

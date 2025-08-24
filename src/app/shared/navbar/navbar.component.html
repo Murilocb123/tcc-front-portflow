@@ -1,0 +1,48 @@
+<nav
+    class="nav"
+    [class.nav--collapsed]="collapsed()"
+    role="navigation"
+    aria-label="Menu principal"
+>
+    <button
+        class="nav__toggle nav__toggle--floating"
+        type="button"
+        (click)="toggle()"
+        [attr.aria-expanded]="!collapsed()"
+        [title]="collapsed() ? 'Expandir menu' : 'Recolher menu'"
+    >
+        <i class="nav__chevron pi pi-angle-left"></i>
+    </button>
+    <ul class="nav__list">
+        <li class="nav__item" *ngFor="let it of getTopItems()">
+            <a
+                class="nav__link"
+                [routerLink]="it.route"
+                routerLinkActive="is-active"
+                [routerLinkActiveOptions]="{ exact: it.exact ?? true }"
+                [attr.aria-current]="null"
+            >
+                <i class="nav__icon" [ngClass]="it.icon"></i>
+                <span class="nav__label" *ngIf="!collapsed()">{{
+                    it.label
+                }}</span>
+            </a>
+        </li>
+    </ul>
+    <ul class="nav__list list--bottom">
+        <li class="nav__item" *ngFor="let it of getBottomItems()">
+            <a
+                class="nav__link"
+                [routerLink]="it.route"
+                routerLinkActive="is-active"
+                [routerLinkActiveOptions]="{ exact: it.exact ?? true }"
+                [attr.aria-current]="null"
+            >
+                <i class="nav__icon" [ngClass]="it.icon"></i>
+                <span class="nav__label" *ngIf="!collapsed()">{{
+                    it.label
+                }}</span>
+            </a>
+        </li>
+    </ul>
+</nav>

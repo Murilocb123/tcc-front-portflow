@@ -1,0 +1,17 @@
+.layout {
+    min-height: 100dvh;
+    margin-left: var(--nav-current); /* espaço da sidebar */
+    padding-top: var(--topbar-h); /* espaço do topbar fixo */
+    transition: margin-left 0.2s ease, padding-top 0.2s ease;
+
+    background: #0b1020;
+    color: #e5e7eb;
+}
+
+.layout-light {
+    background: var(--layout-background-light) !important;
+}
+
+.layout__content {
+    padding: 1rem;
+}

@@ -9,6 +9,10 @@ import { providePrimeNG } from 'primeng/config';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeaturesModule } from './features/features.module';
+import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { TopbarComponent } from './shared/topbar/topbar.component';
+import { ButtonModule } from 'primeng/button';
 
 const MyTheme = definePreset(Aura, {
     semantic: {
@@ -16,20 +20,21 @@ const MyTheme = definePreset(Aura, {
             light: {
                 primary: { color: '#1DD65A' },
             },
+            dark: {
+                primary: { color: '#1DD65A' },
+            },
         },
     },
 });
 
-
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FeaturesModule
-  ],
+    declarations: [
+        AppComponent,
+        MainLayoutComponent,
+        NavbarComponent,
+        TopbarComponent,
+    ],
+    imports: [BrowserModule, AppRoutingModule, FeaturesModule, ButtonModule],
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideAnimationsAsync(),
@@ -40,11 +45,11 @@ const MyTheme = definePreset(Aura, {
                 // add this
                 preset: MyTheme, // add this
                 options: {
-                    darkModeSelector: false,
+                    darkModeSelector: true,
                 },
             }, // add this
         }), // add this
     ],
-  bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

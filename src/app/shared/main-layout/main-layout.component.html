@@ -1,0 +1,9 @@
+<ng-container *ngIf="started">
+    <app-navbar></app-navbar>
+    <app-topbar></app-topbar>
+    <main class="layout" [ngClass]="layoutClass">
+        <section class="layout__content">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+</ng-container>
