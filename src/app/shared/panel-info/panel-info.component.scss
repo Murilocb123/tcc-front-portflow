@@ -1,0 +1,13 @@
+p-panel {
+    ::ng-deep .p-panel {
+        /*adiciona borda externa no centro*/
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    }
+    ::ng-deep .p-panel-header {
+        padding: 5px;
+        margin-left: 1px;
+        h3 {
+            margin-top: 3px;
+        }
+    }
+}

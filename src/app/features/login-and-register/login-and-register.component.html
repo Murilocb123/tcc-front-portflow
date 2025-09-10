@@ -1,9 +1,10 @@
+<p-toast life="3000" />
 <div class="login-content">
     <p-panel showHeader="false">
         <div class="flex flex-column items-center">
             <!-- logo no centro  -->
             <div class="logo">
-                <img src="logo.jpg" alt="Logo" />
+                <img [src]="themeMode === 'dark' ? 'logo_dark.svg' : 'logo_light.svg'" alt="Logo" />
             </div>
             <div class="tab-section">
                 <div
@@ -28,7 +29,7 @@
                 class="form-container"
                 [formGroup]="loginFormGroup"
                 [@tabsAnimations]
-                (ngSubmit)="login()"
+                (ngSubmit)="onLoginSubmit(loginFormGroup)"
             >
                 <div class="field form-div">
                     <p-floatLabel>
@@ -78,7 +79,7 @@
                 *ngIf="tabActive === TabActive.REGISTER"
                 [formGroup]="registerFormGroup"
                 [@tabsAnimations]
-                (ngSubmit)="register()"
+                (ngSubmit)="onRegisterSubmit(registerFormGroup)"
             >
                 <div class="field form-div">
                     <p-floatLabel>

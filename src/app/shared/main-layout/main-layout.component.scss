@@ -3,9 +3,7 @@
     margin-left: var(--nav-current); /* espaço da sidebar */
     padding-top: var(--topbar-h); /* espaço do topbar fixo */
     transition: margin-left 0.2s ease, padding-top 0.2s ease;
-
-    background: #0b1020;
-    color: #e5e7eb;
+    
 }
 
 .layout-light {
@@ -14,5 +12,22 @@
 
 .layout__content {
     padding: 1rem;
-    padding-left: 1.2rem;
+    padding-left: 2rem;
+}
+
+.page-title {
+    background: var(--topbar-background);
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+}
+
+.page-title__text {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--topbar-text);
+}
+
+.divider {
+    //margem laterais
+    padding: 0 2rem;
 }

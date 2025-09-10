@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
+import { catchError } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 export enum TabActive {
     LOGIN = 'LOGIN',
@@ -33,12 +35,21 @@ export class LoginAndRegisterComponent {
         '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})';
     STRONG_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})';
 
+    themeMode: 'light' | 'dark' = 'light';
+
     constructor(
         private fb: FormBuilder,
-        private authService: AuthService
+        private authService: AuthService,
+        private messageService: MessageService
     ) {
         this.loginFormGroup = this.getLoginFormGroup();
         this.registerFormGroup = this.getRegisterFormGroup();
+        const colorScheme = getComputedStyle(document.documentElement).getPropertyValue('color-scheme').trim();
+        if (colorScheme === 'dark') {
+            this.themeMode = 'dark';
+        } else {
+            this.themeMode = 'light';
+        }
     }
 
     setTabActive(tab: TabActive) {
@@ -154,36 +165,73 @@ export class LoginAndRegisterComponent {
         return '';
     }
 
-    login() {
-        if (this.loginFormGroup.valid) {
-            const loginData = this.loginFormGroup.value;
-            this.authService.login(loginData).subscribe({
-                next: () => {
-                    console.log('Login successful');
-                },
-                error: (err) => {
-                    console.error('Login failed', err);
-                },
-            });
-        } else {
-            console.warn('Login form is invalid');
+    onLoginSubmit(form: any) {
+        if (form.valid) {
+            const input = {
+                email: form.value.email,
+                password: form.value.password
+            }
+            this.authService.login(input)
+                .pipe(
+                    catchError((error) => {
+                        if (error.status === 403) {
+                            this.messageService.add({
+                                severity: 'warn',
+                                summary: 'Acesso Negado',
+                                detail: 'Sua conta ainda não foi aprovada. Por favor, aguarde a aprovação do administrador.'
+                            });
+                        } else {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Erro de Login',
+                                detail: 'Credenciais inválidas. Por favor, tente novamente.'
+                            });
+                        }
+                        // this.loadingState = false;
+                        throw error;
+                    }))
+                .subscribe({
+                    next: (response) => {
+                        console.log('Login bem-sucedido:', response);
+                        // Redirecionar ou realizar outras ações após o login
+                    }
+                });
         }
     }
 
-    register() {
-        if (this.registerFormGroup.valid) {
-            const userData = this.registerFormGroup.value;
-            this.authService.register(userData).subscribe({
-                next: () => {
-                    console.log('Registration successful');
-                },
-                error: (err) => {
-                    console.error('Registration failed', err);
-                },
-            });
-        } else {
-            console.warn('Register form is invalid');
+    onRegisterSubmit(form: any) {
+        if (form.valid) {
+            //this.loadingState = true;
+
+            const input = {
+                name: form.value.username,
+                email: form.value.email,
+                password: form.value.password
+            }
+            this.authService.register(input)
+                .pipe(
+                    catchError((error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro de Registro',
+                            detail: 'Não foi possível registrar o usuário. Por favor, tente novamente.'
+                        });
+                        // this.loadingState = false;
+
+                        throw error;
+                    }))
+                .subscribe({
+                    next: (response) => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Registro bem-sucedido',
+                            detail: 'Usuário registrado com sucesso. Aguarde aprovação...'
+                        });
+                        this.tabActive = TabActive.LOGIN; // Volta para a aba de login após o registro
+                    }
+                });
         }
     }
+
 }
 

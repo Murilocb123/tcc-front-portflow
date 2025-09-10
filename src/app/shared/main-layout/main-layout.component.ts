@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    Signal,
+    ViewEncapsulation,
+} from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-main-layout',
@@ -7,17 +15,28 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
     styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-    public layoutClass: string = ''
+    title: string = '';
+
+    public layoutClass: string = '';
     public started = false;
 
-    constructor() {}
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
-        const colorScheme = getComputedStyle(document.documentElement).getPropertyValue('color-scheme').trim();
+        this.router.events.subscribe(() => {
+            this.activatedRoute?.firstChild?.title.subscribe((title) => {
+                this.title = title || 'Sem título';
+            });
+        });
+        const colorScheme = getComputedStyle(document.documentElement)
+            .getPropertyValue('color-scheme')
+            .trim();
         if (colorScheme === 'light') {
             this.layoutClass = 'layout-light';
-        } 
+        }
         this.started = true;
     }
-
 }

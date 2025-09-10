@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginDto } from './login';
 import { tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { UserDto } from '../user-entity/user';
+import { UserDto } from '../entities/user/user';
 import { environment } from '../../../environments/environment';
+import { LoginDto } from './dto/login';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +24,19 @@ export class AuthService {
                 tap((value) => {
                     sessionStorage.setItem('auth-token', value.token);
                     sessionStorage.setItem('username', value.name);
-                    this.router.navigate(['/login']);
+                    this.router.navigate(['/dashboard']);
                 })
             );
     }
 
     register(newUser: UserDto) {
         return this.httpClient.post<UserDto>(this.API_URL + this.BASE_ROUTE + '/register', newUser);
+    }
+
+    logout() {
+        sessionStorage.removeItem('auth-token');
+        sessionStorage.removeItem('username');
+        this.router.navigate(['/login']);
     }
 
 }

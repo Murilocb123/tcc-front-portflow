@@ -8,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
 
+      tabs = [
+        { route: 'dashboard', label: 'Dashboard', icon: 'pi pi-home' },
+        { route: 'transactions', label: 'Transactions', icon: 'pi pi-chart-line' },
+        { route: 'products', label: 'Products', icon: 'pi pi-list' },
+        { route: 'messages', label: 'Messages', icon: 'pi pi-inbox' }
+    ];
+
 }

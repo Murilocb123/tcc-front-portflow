@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
         },
         {
             label: 'Transações',
-            route: '/transactions',
+            route: '/transaction',
             icon: PrimeIcons.ARROW_RIGHT_ARROW_LEFT,
             position: 'top',
         },
@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit {
     constructor() {
         // atualiza largura global para o layout reagir (margin-left do conteúdo)
         effect(() => {
-            const w = this.collapsed() ? '80px' : '240px';
+            const w = this.collapsed() ? '70px' : '240px';
             document.documentElement.style.setProperty('--nav-w', w);
             localStorage.setItem('nav-collapsed', String(this.collapsed()));
         });

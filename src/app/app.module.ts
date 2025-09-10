@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
 
 const MyTheme = definePreset(Aura, {
     semantic: {
@@ -26,7 +27,7 @@ const MyTheme = definePreset(Aura, {
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, AppRoutingModule, FeaturesModule, SharedModule],
+    imports: [BrowserModule, AppRoutingModule, FeaturesModule, SharedModule, CoreModule],
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideAnimationsAsync(),

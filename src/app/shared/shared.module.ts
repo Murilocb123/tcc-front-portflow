@@ -9,12 +9,16 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { RouterModule } from '@angular/router';
+import { PanelInfoComponent } from './panel-info/panel-info.component';
+import { PanelModule } from 'primeng/panel';
+import { Divider, DividerModule } from 'primeng/divider';
 
 @NgModule({
     declarations: [
       MainLayoutComponent,
       NavbarComponent,
-      TopbarComponent
+      TopbarComponent,
+      PanelInfoComponent
     ],
     imports: [
         CommonModule,
@@ -24,9 +28,12 @@ import { RouterModule } from '@angular/router';
         OverlayBadgeModule,
         BadgeModule,
         AvatarModule,
+        PanelModule,
+        DividerModule
     ],
     exports: [
-      MainLayoutComponent
+      MainLayoutComponent,
+      PanelInfoComponent
     ]
 })
 export class SharedModule {}

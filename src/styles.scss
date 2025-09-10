@@ -13,15 +13,15 @@ html, body {
 
 :root {
   --nav-w: 240px;              /* largura do menu (atualizada via JS) */
-  --nav-w-collapsed: 80px;
+  --nav-w-collapsed: 70px;
   --nav-current: var(--nav-w); // será atualizado via TS da sidebar
-  --topbar-h: 80px;
+  --topbar-h: 60px;
 
   --nav-bg: var(--p-content-background);           /* slate-900 */
   --nav-fg: var(--p-text-color);           /* gray-200 */
   --nav-fg-dim: var(--p-text-color-dim);       /* gray-400 */
   --nav-active: var(--p-primary-color);       /* blue-400 */
-  --layout-background-light: #E1E9F9;   
+  --layout-background-light: #F5F5F5;   
   --secondary-color: #088C4F;
 }
 

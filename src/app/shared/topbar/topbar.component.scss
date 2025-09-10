@@ -6,7 +6,9 @@
 
 $bp-lg: 1024px !default;
 
-$brand-logo-size: 44px;
+$brand-logo-size: 55px;
+
+
 
 .topbar {
     position: fixed;
@@ -14,7 +16,7 @@ $brand-logo-size: 44px;
     left: 0; /* começa após a sidebar */
     right: 0;
     height: var(--topbar-h);
-    background: var(--nav-bg);
+    background: #088C4F;
     color: var(--nav-fg);
     border-bottom: 1px solid var(--nav-border);
     z-index: 60; /* abaixo do botão flutuante da sidebar (z=60) */
@@ -53,25 +55,16 @@ $brand-logo-size: 44px;
 }
 
 .notification-button {
-    border-radius: 9999px;
-    width: 48px;
-    height: 48px;
     background-color: #fff;
     color: #334155;
     border-color: transparent;
 
-    //sombra ao redor distribuida igualmente
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .user-info {
     display: flex;
     align-items: center;
-    border-radius: 9999px;
     border-color: transparent;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.3);
-    height: 48px;
-    padding: 0 0.75rem;
     color: #334155;
     background-color: #fff;
     .user-name {
@@ -86,5 +79,27 @@ $brand-logo-size: 44px;
     }
     .topbar__nav {
         gap: 0.25rem;
+    }
+}
+
+.dark-mode {
+    background: var(--nav-bg);
+// Assegura o hover dos itens da lista de ações
+}
+.action_list_itens {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+        background-color: #f3f4f6;
+    }
+
+    i {
+        font-size: 1.25rem;
     }
 }

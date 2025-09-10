@@ -1,13 +1,22 @@
-<header class="topbar" role="navigation" aria-label="Menu superior">
+<header
+    class="topbar"
+    role="navigation"
+    aria-label="Menu superior"
+    [ngClass]="darkClass"
+>
     <div class="topbar__wrap">
         <div class="topbar__brand">
             <!-- título/branding do app -->
-            <img src="logo.jpg" alt="Logo" />
+            <img [src]="'logo_white.svg'" alt="Logo" />
         </div>
 
         <nav class="topbar__nav" aria-label="Ações rápidas">
             <div class="topbar__left_item">
-                <p-overlaybadge value="2" badgeSize="small">
+                <p-overlaybadge
+                    value="0"
+                    badgeSize="small"
+                    badgeDisabled="true"
+                >
                     <button
                         #notificationButton
                         pButton
@@ -15,17 +24,43 @@
                         class="notification-button"
                         aria-label="Notificações"
                         (click)="openNotificationPanel($event)"
+                        [rounded]="true" 
                     ></button>
                 </p-overlaybadge>
                 <!-- um botão com nome e email do usuario logado e foto de perfil com components do primeng com bordas arredondadas -->
-                <button pButton class="user-info">
-                    <p-avatar
-                        image="https://i.pravatar.cc/150?img=3"
-                        shape="circle"
-                        styleClass="mr-2"
-                    ></p-avatar>
-                    <span class="user-name">Murilo Silva</span>
+                <button pButton class="user-info" (click)="toggleUserPopover($event)" rounded="true" icon="pi pi-user" [label]="username">
                 </button>
+                <p-popover #userPopover >
+                    <div class="flex flex-column gap-4">
+                        <div>
+                            <span class="font-medium block mb-2 text-center">Ações</span>
+                            <hr />
+                            <!-- quero uma lista com uma opção de mudar de tema e outra de sair deverao ser links tag <a> um em cima do outro com icone -->
+                            <div class="flex flex-column gap-2">
+                                <a
+                                    class="action_list_itens"
+                                    (click)="toggleTheme()"
+                                >
+                                    <i
+                                        class="pi pi-fw pi-adjust"
+                                        style="font-size: 1.2rem"
+                                    ></i>
+                                    Mudar tema
+                                </a>
+                                <a
+                                    class="action_list_itens"
+                                    (click)="logout()"
+                                >
+                                    <i
+                                        class="pi pi-fw pi-sign-out"
+                                        style="font-size: 1.2rem"
+                                    ></i>
+                                    Sair
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </p-popover>
             </div>
         </nav>
     </div>
