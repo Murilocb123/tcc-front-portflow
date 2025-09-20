@@ -1,24 +1,33 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { PopoverModule } from 'primeng/popover';
-import { OverlayBadgeModule } from 'primeng/overlaybadge';
-import { BadgeModule } from 'primeng/badge';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
+import { RouterModule } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
+import { BadgeModule } from 'primeng/badge';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { DividerModule } from 'primeng/divider';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { PanelModule } from 'primeng/panel';
+import { PopoverModule } from 'primeng/popover';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { TopbarComponent } from './topbar/topbar.component';
-import { RouterModule } from '@angular/router';
 import { PanelInfoComponent } from './panel-info/panel-info.component';
-import { PanelModule } from 'primeng/panel';
-import { Divider, DividerModule } from 'primeng/divider';
+import { TopbarComponent } from './topbar/topbar.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
     declarations: [
-      MainLayoutComponent,
-      NavbarComponent,
-      TopbarComponent,
-      PanelInfoComponent
+        MainLayoutComponent,
+        NavbarComponent,
+        TopbarComponent,
+        PanelInfoComponent,
     ],
     imports: [
         CommonModule,
@@ -29,11 +38,17 @@ import { Divider, DividerModule } from 'primeng/divider';
         BadgeModule,
         AvatarModule,
         PanelModule,
-        DividerModule
+        DividerModule,
+        ConfirmDialogModule,
+        ToastModule,
+        ProgressSpinnerModule,
+        FormsModule,
+        SelectModule,
+        DialogModule,
+        FloatLabelModule,
+        InputTextModule,
+        CheckboxModule 
     ],
-    exports: [
-      MainLayoutComponent,
-      PanelInfoComponent
-    ]
+    exports: [MainLayoutComponent, PanelInfoComponent],
 })
 export class SharedModule {}

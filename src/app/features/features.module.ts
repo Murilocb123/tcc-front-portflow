@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -20,6 +20,15 @@ import { StrategyComponent } from './strategy/strategy.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DatePickerModule } from 'primeng/datepicker';
+import { DividerModule } from 'primeng/divider';
+import { SelectModule } from 'primeng/select';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingPageService } from '../shared/loading-page/loading-page.service';
+
 
 
 @NgModule({
@@ -40,9 +49,15 @@ import { DialogModule } from 'primeng/dialog';
         SharedModule,
         ToastModule,
         TableModule,
-        DialogModule
+        DialogModule,
+        DropdownModule,
+        InputNumberModule,
+        DatePickerModule,   
+        DividerModule,
+        SelectModule,
+        ConfirmDialogModule,
+        ProgressSpinnerModule
     ],
-    providers: [MessageService
-],
+    providers: [MessageService, ConfirmationService, LoadingPageService],
 })
 export class FeaturesModule {}

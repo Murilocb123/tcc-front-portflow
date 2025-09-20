@@ -5,11 +5,18 @@
         <section class="page-title">
             <h1 class="page-title__text">{{ title }}</h1>
         </section>
-        <div class="divider">
+        <div class="divider" >
             <p-divider class="divider" />
         </div>
         <section class="layout__content">
+            <div *ngIf="isLoading" class="loading-overlay">
+                <p-progress-spinner strokeWidth="4" animationDuration="0.5s"></p-progress-spinner>
+            </div>
             <router-outlet />
         </section>
     </main>
 </ng-container>
+
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

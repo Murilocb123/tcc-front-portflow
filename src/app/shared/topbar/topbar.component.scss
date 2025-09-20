@@ -8,15 +8,13 @@ $bp-lg: 1024px !default;
 
 $brand-logo-size: 55px;
 
-
-
 .topbar {
     position: fixed;
     top: 0;
     left: 0; /* começa após a sidebar */
     right: 0;
     height: var(--topbar-h);
-    background: #088C4F;
+    background: #088c4f;
     color: var(--nav-fg);
     border-bottom: 1px solid var(--nav-border);
     z-index: 60; /* abaixo do botão flutuante da sidebar (z=60) */
@@ -25,7 +23,8 @@ $brand-logo-size: 55px;
 
     &__wrap {
         height: 100%;
-        display: grid;
+        display: flex;
+        flex-wrap: wrap;
         grid-template-columns: 1fr auto; /* brand | links */
         align-items: center;
         gap: 1rem;
@@ -33,16 +32,33 @@ $brand-logo-size: 55px;
     }
 
     &__brand {
+        flex: 1;
+        display: flex;
+        justify-content: left;
+        align-items: left;
         img {
             height: $brand-logo-size;
-            width: auto;
+        }
+    }
+
+    &__portfolio-select {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 2rem;
+        p-select {
+            width: 100%;
+            max-width: 300px;
         }
     }
 
     &__nav {
+        flex: 1;
         display: flex;
-        align-items: center;
+        align-items: right;
         gap: 0.5rem;
+        justify-content: right;
     }
 
     &__left_item {
@@ -58,7 +74,6 @@ $brand-logo-size: 55px;
     background-color: #fff;
     color: #334155;
     border-color: transparent;
-
 }
 
 .user-info {
@@ -84,7 +99,7 @@ $brand-logo-size: 55px;
 
 .dark-mode {
     background: var(--nav-bg);
-// Assegura o hover dos itens da lista de ações
+    // Assegura o hover dos itens da lista de ações
 }
 .action_list_itens {
     display: flex;

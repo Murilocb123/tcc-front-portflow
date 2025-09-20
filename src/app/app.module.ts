@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
+import ptBR from "primelocale/pt-BR.json";
+
 
 const MyTheme = definePreset(Aura, {
     semantic: {
@@ -33,15 +35,14 @@ const MyTheme = definePreset(Aura, {
         provideAnimationsAsync(),
         provideHttpClient(withFetch()),
         providePrimeNG({
-            // add this
+            translation: ptBR["pt-BR"],
             theme: {
-                // add this
-                preset: MyTheme, // add this
+                preset: MyTheme,
                 options: {
                     darkModeSelector: false,
                 },
-            }, // add this
-        }), // add this
+            },
+        }),
     ],
     bootstrap: [AppComponent],
 })

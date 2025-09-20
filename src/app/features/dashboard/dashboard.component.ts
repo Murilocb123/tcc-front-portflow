@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoadingPageService } from '../../shared/loading-page/loading-page.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
       tabs = [
         { route: 'dashboard', label: 'Dashboard', icon: 'pi pi-home' },
@@ -14,5 +15,12 @@ export class DashboardComponent {
         { route: 'products', label: 'Products', icon: 'pi pi-list' },
         { route: 'messages', label: 'Messages', icon: 'pi pi-inbox' }
     ];
+
+    constructor(private loadingService: LoadingPageService) {}
+
+
+    ngOnInit(): void {
+    this.loadingService.hide();
+    }
 
 }

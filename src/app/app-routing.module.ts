@@ -20,7 +20,7 @@ export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
-        //canActivate: [AuthGuard], // protege todas as rotas filhas
+        canActivate: [AuthGuard], // protege todas as rotas filhas
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
             {

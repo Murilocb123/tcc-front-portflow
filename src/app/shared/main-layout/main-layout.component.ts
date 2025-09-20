@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { LoadingPageService } from '../loading-page/loading-page.service';
 
 @Component({
     selector: 'app-main-layout',
@@ -16,13 +17,15 @@ import { filter, Subscription } from 'rxjs';
 })
 export class MainLayoutComponent implements OnInit {
     title: string = '';
-
     public layoutClass: string = '';
     public started = false;
+    public isLoading = false;
+    private loadingSub?: Subscription;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private loadingService: LoadingPageService
     ) {}
 
     ngOnInit(): void {
@@ -37,6 +40,18 @@ export class MainLayoutComponent implements OnInit {
         if (colorScheme === 'light') {
             this.layoutClass = 'layout-light';
         }
+        this.loadingSub = this.loadingService.loading$.subscribe((loading) => {
+            this.isLoading = loading;
+            if (loading) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
         this.started = true;
+    }
+
+    ngOnDestroy(): void {
+        this.loadingSub?.unsubscribe();
     }
 }
