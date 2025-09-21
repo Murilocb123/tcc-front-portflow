@@ -1,4 +1,4 @@
-<ng-container *ngIf="started">
+<ng-container>
     <app-navbar></app-navbar>
     <app-topbar></app-topbar>
     <main class="layout" [ngClass]="layoutClass">
@@ -12,7 +12,7 @@
             <div *ngIf="isLoading" class="loading-overlay">
                 <p-progress-spinner strokeWidth="4" animationDuration="0.5s"></p-progress-spinner>
             </div>
-            <router-outlet />
+            <router-outlet *ngIf="showChild" />
         </section>
     </main>
 </ng-container>

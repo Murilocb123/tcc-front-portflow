@@ -18,14 +18,15 @@ import { LoadingPageService } from '../loading-page/loading-page.service';
 export class MainLayoutComponent implements OnInit {
     title: string = '';
     public layoutClass: string = '';
-    public started = false;
+    public showChild = false;
     public isLoading = false;
     private loadingSub?: Subscription;
+    private reloadChildSub?: Subscription;
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private loadingService: LoadingPageService
+        private loadingService: LoadingPageService,
     ) {}
 
     ngOnInit(): void {
@@ -48,10 +49,23 @@ export class MainLayoutComponent implements OnInit {
                 document.body.style.overflow = '';
             }
         });
-        this.started = true;
+        this.reloadChildSub = this.loadingService.reloadChild$.subscribe(() => {
+            this.reloadChild();
+        });
+        this.showChild = true;
+    }
+
+    reloadChild() {
+        this.loadingService.show();
+        this.showChild = false;
+        setTimeout(() => {
+            this.showChild = true;
+            this.loadingService.hide();
+        }, 500);
     }
 
     ngOnDestroy(): void {
         this.loadingSub?.unsubscribe();
+        this.reloadChildSub?.unsubscribe();
     }
 }

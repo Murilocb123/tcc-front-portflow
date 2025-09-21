@@ -2,20 +2,31 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class LoadingPageService {
+    private loadingSubject = new BehaviorSubject<boolean>(false);
+    private reloadChildSubject = new BehaviorSubject<boolean>(false);
+    loading$: Observable<boolean> = this.loadingSubject.asObservable();
+    reloadChild$: Observable<boolean> = this.reloadChildSubject.asObservable();
 
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$: Observable<boolean> = this.loadingSubject.asObservable();
+    private loadingCount = 0;
 
-  show() {
-    this.loadingSubject.next(true);
-  }
+    show() {
+        this.loadingCount++;
+        this.loadingSubject.next(true);
+    }
 
-  hide() {
-    this.loadingSubject.next(false);
-  }
+    hide() {
+        this.loadingCount = Math.max(0, this.loadingCount - 1);
+        if (this.loadingCount === 0) {
+            this.loadingSubject.next(false);
+        }
+    }
 
-  constructor() { }
+    triggerReloadChild() {
+        this.reloadChildSubject.next(true);
+    }
+
+    constructor() {}
 }

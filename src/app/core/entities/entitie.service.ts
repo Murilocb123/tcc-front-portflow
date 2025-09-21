@@ -30,7 +30,7 @@ export abstract class EntitiesService<T> {
         protected router: Router,
         protected readonly BASE_ROUTE: string,
         protected readonly messageService: MessageService,
-        protected readonly confirmationService: ConfirmationService
+        protected readonly confirmationService: ConfirmationService,
     ) {}
 
     create(data: T): any {
@@ -58,20 +58,38 @@ export abstract class EntitiesService<T> {
         const queryParams: any = { page, size };
         if (sort) queryParams.sort = sort;
         // Adiciona cada campo do filtro como parâmetro individual
-        Object.keys(filter).forEach(key => {
-            if (filter[key] !== undefined && filter[key] !== null && filter[key] !== '') {
+        Object.keys(filter).forEach((key) => {
+            if (
+                filter[key] !== undefined &&
+                filter[key] !== null &&
+                filter[key] !== ''
+            ) {
                 queryParams[key] = filter[key];
             }
         });
-        return this.executeRequest<T[]>(HttpMethod.GET, '', undefined, queryParams);
+        return this.executeRequest<T[]>(
+            HttpMethod.GET,
+            '',
+            undefined,
+            queryParams,
+        );
     }
-    
-    executeRequest<T = any>(method: HttpMethod, endpoint: string, body?: any, params?: any) {
+
+    executeRequest<T = any>(
+        method: HttpMethod,
+        endpoint: string,
+        body?: any,
+        params?: any,
+    ) {
         const url = `${this.API_URL}${this.BASE_ROUTE}${endpoint}`;
-        const headers = {
+        let headers: { [key: string]: string } = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${this.getToken()}`,
         };
+        if (sessionStorage.getItem('selectedPortfolio')) {
+            headers['selectedPortfolio'] =
+                sessionStorage.getItem('selectedPortfolio') || '';
+        }
         const options: any = { headers };
         if (method === HttpMethod.GET && params) {
             options.params = params;
@@ -82,7 +100,7 @@ export abstract class EntitiesService<T> {
             catchError((error) => {
                 this.defaultCatchError(error);
                 return throwError(() => error);
-            })
+            }),
         );
     }
 
@@ -95,8 +113,7 @@ export abstract class EntitiesService<T> {
             });
             this.confirmationService.confirm({
                 header: 'Sessão Expirada',
-                message:
-                    'Você será redirecionado para a página de login.',
+                message: 'Você será redirecionado para a página de login.',
                 accept: () => {
                     this.router.navigate(['/login']);
                     sessionStorage.clear();
@@ -105,7 +122,32 @@ export abstract class EntitiesService<T> {
                 closable: false,
                 rejectVisible: false,
             });
+        } else if (error.status === 400) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: error.error?.message || 'Requisição inválida.',
+            });
+        } else if (error.status === 404) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Recurso não encontrado.',
+            });
+        } else if (error.status === 500) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro no servidor. Tente novamente mais tarde.',
+            });
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+            });
         }
+        console.error('Erro na requisição HTTP:', error);
     }
 
     private getToken(): string | null {

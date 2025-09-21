@@ -6,6 +6,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { StrategyComponent } from './features/strategy/strategy.component';
 import { AuthGuard } from './core/auth/auth-guard.service';
 import { TransactionComponent } from './features/transaction/transaction.component';
+import { EventsComponent } from './features/events/events.component';
 
 export const routes: Routes = [
     {
@@ -38,6 +39,11 @@ export const routes: Routes = [
                 component: TransactionComponent,
                 title: 'Transações'
             },
+            {
+                path: 'events',
+                component: EventsComponent,
+                title: 'Eventos'
+            }
 
             // ... demais features
         ],

@@ -1,18 +1,17 @@
+<div class="flex flex-wrap justify-content align-items-center pb-2">
+    <button
+        pButton
+        type="button"
+        label="Adicionar"
+        icon="pi pi-plus"
+        class="p-button-success"
+        size="small"
+        (click)="showDialog()"
+    ></button>
+</div>
 <p-panel>
     <!-- botão para adicionar transação -->
-    <ng-template pTemplate="header">
-        <div class="flex flex-wrap justify-content-start align-items-center">
-            <button
-                pButton
-                type="button"
-                label="Adicionar"
-                icon="pi pi-plus"
-                class="p-button-success"
-                size="small"
-                (click)="showDialog()"
-            ></button>
-        </div>
-    </ng-template>
+    <ng-template pTemplate="header"> </ng-template>
 
     <p-table
         [value]="transactions"
@@ -43,58 +42,80 @@
         </ng-template>
         <ng-template #body let-transaction>
             <tr>
-                <td class="text-center">{{ transaction.tradeDate | date : "dd/MM/yyyy" }}</td>
-                <td class="text-center">{{ transaction.asset?.symbol }}</td>
-                <td class="text-center">{{ transaction.type }}</td>
+                <td class="text-center">
+                    {{ transaction.tradeDate | date: 'dd/MM/yyyy' }}
+                </td>
+                <td class="text-center">{{ transaction.asset?.ticker }}</td>
+                <td class="text-center">
+                    {{ getTransactionTypeLabel(transaction.type) }}
+                </td>
                 <td class="text-center">{{ transaction?.broker?.name }}</td>
-                <td class="text-center">{{ transaction.quantity | number : "1.2-8" }}</td>
+                <td class="text-center">
+                    {{ transaction.quantity | number: '1.2-8' }}
+                </td>
                 <td class="text-center">
                     {{
-                        transaction.price
-                            | currency : "BRL" : "symbol" : "1.2-6"
+                        transaction.price | currency: 'BRL' : 'symbol' : '1.2-6'
                     }}
                 </td>
                 <td class="text-center">
                     {{
                         transaction.grossValue
-                            | currency : "BRL" : "symbol" : "1.2-2"
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
                         transaction.feeValue
-                            | currency : "BRL" : "symbol" : "1.2-2"
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
                         transaction.taxValue
-                            | currency : "BRL" : "symbol" : "1.2-2"
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
                         transaction.netValue
-                            | currency : "BRL" : "symbol" : "1.2-2"
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
-                <td class="flex justify-content-center">
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-trash"
-                        class="p-button-danger p-button-sm"
-                        (click)="confirmDelete(transaction.id)"
-                    ></button>
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-pencil"
-                        class="p-button-warning p-button-sm ml-2"
-                        (click)="editTransaction(transaction)"
-                    ></button>
+                <td class="text-center">
+                    <div class="flex items-center justify-center gap-1">
+                        <button
+                            pButton
+                            type="button"
+                            icon="pi pi-trash"
+                            class="p-button-danger p-button-sm"
+                            (click)="confirmDelete(transaction.id)"
+                        ></button>
+                        <button
+                            pButton
+                            type="button"
+                            icon="pi pi-pencil"
+                            class="p-button-warning p-button-sm ml-2"
+                            (click)="editTransaction(transaction)"
+                        ></button>
+                    </div>
                 </td>
-                
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td
+                    colspan="11"
+                    class="flex-row justify-content-center align-items-center text-center w-full"
+                >
+                    <i
+                        class="pi pi-info-circle"
+                        style="font-size: 2rem; color: var(--p-primary-color)"
+                    ></i>
+                    <h3 class="w-full text-center">
+                        Nenhuma transação encontrada.
+                    </h3>
+                </td>
             </tr>
         </ng-template>
     </p-table>
@@ -113,7 +134,7 @@
     <!-- cria formulário para adicionar transação usando float label do primeng(<p-floatLabel>)-->
     <form [formGroup]="transactionForm" class="formgrid grid pt-2">
         <div class="field col-12 md:col-6 pt-3">
-            <p-floatlabel class="w-full md:w-56" >
+            <p-floatlabel class="w-full md:w-56">
                 <p-select
                     formControlName="asset"
                     inputId="asset"
@@ -132,17 +153,17 @@
         </div>
         <div class="field col-12 md:col-6 pt-3">
             <p-float-label>
-            <p-select
-                formControlName="type"
-                [options]="transactionTypes"
-                class="w-full"
-            ></p-select>
-            <label for="type">Tipo</label>
+                <p-select
+                    formControlName="type"
+                    [options]="transactionTypes"
+                    class="w-full"
+                ></p-select>
+                <label for="type">Tipo</label>
             </p-float-label>
         </div>
 
         <div class="field col-12 md:col-6 pt-3">
-            <p-floatlabel class="w-full md:w-56" >
+            <p-floatlabel class="w-full md:w-56">
                 <p-select
                     formControlName="broker"
                     inputId="broker"
@@ -227,17 +248,56 @@
                 <label for="tradeDate">Data da transação</label>
             </p-floatlabel>
         </div>
+        <div class="field col-12 md:col-6 pt-3">
+            <p-card class="w-full md:w-56">
+                <ng-template pTemplate="title">
+                    <div class="font-bold text-base">Valor Bruto</div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div class="flex items-center justify-between align-items-center">
+                        <div class="text-2xl font-bold w-full">
+                            {{
+                                transactionForm.get('quantity')?.value *
+                                    transactionForm.get('price')?.value
+                                    | currency: 'BRL' : 'symbol' : '1.2-2'
+                            }}
+                        </div>
+                        <span
+                            class="border-circle bg-yellow-100 ml-2 p-3"
+                        >
+                            <i class="pi pi-money-bill text-yellow-700" style="font-size: 1.5rem;"></i>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-card>
+        </div>
+        <div class="field col-12 md:col-6 pt-3">
+            <p-card class="w-full md:w-56">
+                <ng-template pTemplate="title">
+                    <div class="font-bold text-base">Valor Líquido</div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div class="flex items-center justify-between align-items-center">
+                        <div class="text-2xl font-bold w-full">
+                            {{
+                                transactionForm.get('quantity')?.value *
+                                    transactionForm.get('price')?.value -
+                                    transactionForm.get('feeValue')?.value -
+                                    transactionForm.get('taxValue')?.value
+                                    | currency: 'BRL' : 'symbol' : '1.2-2'
+                            }}
+                        </div>
+                        <span
+                            class="border-circle bg-blue-100 ml-2 p-3"
+                        >
+                            <i class="pi pi-wallet text-blue-700" style="font-size: 1.5rem;"></i>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-card>
+        </div>
         <p-divider />
         <div class="field col-12 flex justify-content-end gap-2">
-            <button
-                pButton
-                type="button"
-                label="Salvar"
-                icon="pi pi-check"
-                class="p-button-success"
-                (click)="addTransaction()"
-                [disabled]="transactionForm.invalid"
-            ></button>
             <button
                 pButton
                 type="button"
@@ -245,6 +305,15 @@
                 icon="pi pi-times"
                 class="p-button-secondary"
                 (click)="visible = false"
+            ></button>
+            <button
+                pButton
+                type="button"
+                label="Salvar"
+                icon="pi pi-check"
+                class="p-button-success"
+                (click)="saveTransaction()"
+                [disabled]="transactionForm.invalid"
             ></button>
         </div>
     </form>

@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { PortfolioService } from '../../core/entities/portfolio/portfolio.service';
-import { PortfolioDTO } from '../../core/entities/portfolio/portfolio.dto';
 import { Button } from 'primeng/button';
 import { Popover } from 'primeng/popover';
+import { finalize, skip } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
+import { PortfolioDTO } from '../../core/entities/portfolio/portfolio.dto';
+import { PortfolioService } from '../../core/entities/portfolio/portfolio.service';
+import { LoadingPageService } from '../loading-page/loading-page.service';
 import { getTheme } from '../utils/theme.util';
-import { ThemeUtils } from '@primeng/themes';
 
 type Notification = {
     id: number;
@@ -60,6 +61,7 @@ export class TopbarComponent implements OnInit {
         private authService: AuthService,
         private portfolioService: PortfolioService,
         private router: Router,
+        private loadingPageService: LoadingPageService,
     ) {
         // Simulação de recebimento de notificações
     }
@@ -77,27 +79,40 @@ export class TopbarComponent implements OnInit {
     }
 
     loadPortfolios() {
-        this.portfolioService.listAll().subscribe((data: PortfolioDTO[]) => {
-            this.portfolios = data;
-            // Seleciona a principal ou mantém a selecionada
-            const principal = data.find((p) => p.defaultPortfolio);
-            if (principal) {
-                this.selectedPortfolio = principal;
-                this.setPortfolioSession(principal);
-            } else if (this.selectedPortfolio) {
-                this.setPortfolioSession(this.selectedPortfolio);
-            }
-        });
+        this.loadingPageService.show();
+        this.portfolioService
+            .listAll()
+            .pipe(finalize(() => this.loadingPageService.hide()))
+            .subscribe((data: PortfolioDTO[]) => {
+                this.portfolios = data;
+                const lastSelected = this.getLastSelectedPortfolio();
+                this.selectedPortfolio =
+                    data.find((p) => p.id === lastSelected?.id) ||
+                    data.find((p) => p.defaultPortfolio) ||
+                    undefined;
+                if (this.selectedPortfolio) {
+                    this.setPortfolioSession(this.selectedPortfolio);
+                }
+            });
     }
 
     onPortfolioChange(event: any) {
         this.setPortfolioSession(event.value);
-        // Recarrega a rota atual sem reload total
-        this.router.navigate([this.router.url]);
+
+        this.loadingPageService.triggerReloadChild();
     }
 
     setPortfolioSession(portfolio: PortfolioDTO) {
-        sessionStorage.setItem('selectedPortfolio', JSON.stringify(portfolio));
+        sessionStorage.setItem('selectedPortfolio', portfolio.id || '');
+        localStorage.setItem(
+            'lastSelectedPortfolio',
+            JSON.stringify(portfolio),
+        );
+    }
+
+    getLastSelectedPortfolio(): PortfolioDTO | null | undefined {
+        const stored = localStorage.getItem('lastSelectedPortfolio');
+        return stored ? JSON.parse(stored) : null;
     }
 
     showAddPortfolioDialog() {
@@ -130,8 +145,7 @@ export class TopbarComponent implements OnInit {
         this.userPopover.toggle(event);
     }
 
-    toggleTheme() {
-    }
+    toggleTheme() {}
 
     logout() {
         this.authService.logout();

@@ -17,7 +17,7 @@ type NavItem = {
 })
 export class NavbarComponent implements OnInit {
     // estado (persistido em localStorage)
-    collapsed = signal<boolean>(this.readPref());
+    collapsed = signal<boolean>(true);
 
     // exemplo de rotas (substitua pelas suas)
     items: NavItem[] = [
@@ -38,6 +38,12 @@ export class NavbarComponent implements OnInit {
             label: 'Transações',
             route: '/transaction',
             icon: PrimeIcons.ARROW_RIGHT_ARROW_LEFT,
+            position: 'top',
+        },
+        {
+            label: 'Eventos',
+            route: '/events',
+            icon: PrimeIcons.CALENDAR,
             position: 'top',
         },
         {
@@ -63,14 +69,7 @@ export class NavbarComponent implements OnInit {
         this.collapsed.update((v) => !v);
     }
 
-    private readPref(): boolean {
-        const v = localStorage.getItem('nav-collapsed');
-        if (v === null) {
-            // mobile: começa recolhido
-            return window.matchMedia('(max-width: 1024px)').matches;
-        }
-        return v === 'true';
-    }
+    // Removido: sempre começa recolhido
 
     getTopItems(): NavItem[] {
         return this.items.filter((item) => item.position === 'top');

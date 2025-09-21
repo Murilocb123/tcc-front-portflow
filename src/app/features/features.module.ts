@@ -28,11 +28,12 @@ import { SelectModule } from 'primeng/select';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingPageService } from '../shared/loading-page/loading-page.service';
+import { EventsComponent } from './events/events.component';
 
 
 
 @NgModule({
-    declarations: [LoginAndRegisterComponent, DashboardComponent, StrategyComponent, TransactionComponent],
+    declarations: [LoginAndRegisterComponent, DashboardComponent, StrategyComponent, TransactionComponent, EventsComponent],
     imports: [
         CommonModule,
         ButtonModule,
