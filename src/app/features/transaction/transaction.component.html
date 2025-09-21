@@ -60,25 +60,25 @@
                 </td>
                 <td class="text-center">
                     {{
-                        transaction.grossValue
+                        transaction.grossValue ?? 0
                             | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
-                        transaction.feeValue
+                        transaction.feeValue ?? 0
                             | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
-                        transaction.taxValue
+                        transaction.taxValue ?? 0
                             | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
                 <td class="text-center">
                     {{
-                        transaction.netValue
+                        transaction.netValue ?? 0
                             | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
@@ -254,7 +254,9 @@
                     <div class="font-bold text-base">Valor Bruto</div>
                 </ng-template>
                 <ng-template pTemplate="content">
-                    <div class="flex items-center justify-between align-items-center">
+                    <div
+                        class="flex items-center justify-between align-items-center"
+                    >
                         <div class="text-2xl font-bold w-full">
                             {{
                                 transactionForm.get('quantity')?.value *
@@ -262,10 +264,11 @@
                                     | currency: 'BRL' : 'symbol' : '1.2-2'
                             }}
                         </div>
-                        <span
-                            class="border-circle bg-yellow-100 ml-2 p-3"
-                        >
-                            <i class="pi pi-money-bill text-yellow-700" style="font-size: 1.5rem;"></i>
+                        <span class="border-circle bg-yellow-100 ml-2 p-3">
+                            <i
+                                class="pi pi-money-bill text-yellow-700"
+                                style="font-size: 1.5rem"
+                            ></i>
                         </span>
                     </div>
                 </ng-template>
@@ -277,20 +280,20 @@
                     <div class="font-bold text-base">Valor Líquido</div>
                 </ng-template>
                 <ng-template pTemplate="content">
-                    <div class="flex items-center justify-between align-items-center">
+                    <div
+                        class="flex items-center justify-between align-items-center"
+                    >
                         <div class="text-2xl font-bold w-full">
                             {{
-                                transactionForm.get('quantity')?.value *
-                                    transactionForm.get('price')?.value -
-                                    transactionForm.get('feeValue')?.value -
-                                    transactionForm.get('taxValue')?.value
+                                getNetValue(transactionForm.value)
                                     | currency: 'BRL' : 'symbol' : '1.2-2'
                             }}
                         </div>
-                        <span
-                            class="border-circle bg-blue-100 ml-2 p-3"
-                        >
-                            <i class="pi pi-wallet text-blue-700" style="font-size: 1.5rem;"></i>
+                        <span class="border-circle bg-blue-100 ml-2 p-3">
+                            <i
+                                class="pi pi-wallet text-blue-700"
+                                style="font-size: 1.5rem"
+                            ></i>
                         </span>
                     </div>
                 </ng-template>

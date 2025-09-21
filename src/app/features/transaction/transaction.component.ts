@@ -42,7 +42,7 @@ export class TransactionComponent implements OnInit {
         private loadingService: LoadingPageService,
         private transactionService: TransactionService,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {}
 
     ngOnInit(): void {
@@ -150,7 +150,6 @@ export class TransactionComponent implements OnInit {
             rejectLabel: 'Cancelar',
             acceptLabel: 'Excluir',
             acceptButtonStyleClass: 'p-button-danger',
-            
         });
     }
 
@@ -184,10 +183,9 @@ export class TransactionComponent implements OnInit {
         this.transactionForm.setValue({
             id: transaction.id || null,
             asset: transaction.asset,
-            type:
-                this.transactionTypes.find(
-                    (t) => t.value === transaction.type
-                )?.value,
+            type: this.transactionTypes.find(
+                (t) => t.value === transaction.type,
+            )?.value,
             broker: transaction.broker,
             quantity: transaction.quantity,
             price: transaction.price,
@@ -202,5 +200,23 @@ export class TransactionComponent implements OnInit {
     getTransactionTypeLabel(value: TransactionType): string {
         const type = this.transactionTypes.find((t) => t.value === value);
         return type ? type.label : 'Desconhecido';
+    }
+
+    getNetValue(transaction: TransactionDto): number {
+        let grossValue = (transaction.quantity ?? 0) * (transaction.price ?? 0);
+        if (transaction?.type === TransactionType.SELL) {
+            return (
+                grossValue -
+                (transaction.feeValue ?? 0) -
+                (transaction.taxValue ?? 0)
+            );
+        } else if (transaction?.type === TransactionType.BUY) {
+            return (
+                grossValue +
+                (transaction.feeValue ?? 0) +
+                (transaction.taxValue ?? 0)
+            );
+        }
+        return grossValue;
     }
 }
