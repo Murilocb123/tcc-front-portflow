@@ -7,7 +7,7 @@ export interface TransactionDto {
   broker?: any; // ou broker: BrokerDto
   asset?: any; // ou asset: AssetDto
   type: TransactionType; // TxnType
-  tradeDate: string; // ISO date string
+  tradeDate: Date; 
   quantity: number;
   price: number;
   grossValue?: number;

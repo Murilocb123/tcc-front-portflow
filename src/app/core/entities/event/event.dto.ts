@@ -12,10 +12,7 @@ export interface EventDto {
   broker?: BrokerDTO;
   asset: AssetDTO;
   type: EventType;
-  exDate: string; // ISO date string
-  payDate?: string; // ISO date string
-  valuePerShare?: number;
+  eventDate?: Date; // ISO date string
   totalValue?: number;
-  currency: string;
   notes?: string;
 }

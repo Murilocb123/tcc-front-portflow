@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -29,6 +29,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingPageService } from '../shared/loading-page/loading-page.service';
 import { EventsComponent } from './events/events.component';
+import { TextareaModule } from 'primeng/textarea';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 
 
@@ -57,7 +59,10 @@ import { EventsComponent } from './events/events.component';
         DividerModule,
         SelectModule,
         ConfirmDialogModule,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        TextareaModule,
+        SelectButtonModule,
+        FormsModule
     ],
     providers: [MessageService, ConfirmationService, LoadingPageService],
 })

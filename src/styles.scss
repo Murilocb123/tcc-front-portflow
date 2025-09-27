@@ -1,31 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
 /* You can add global styles to this file, and also import other style files */
-@use "primeicons/primeicons.css";
-@use "primeflex/primeflex.css";
-@use "@fontsource/montserrat";
+@use 'primeicons/primeicons.css';
+@use 'primeflex/primeflex.css';
+@use '@fontsource/montserrat';
 
-html, body {
+html,
+body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
 }
 
-
 :root {
-  --nav-w: 70px;              /* largura do menu (atualizada via JS) */
-  --nav-w-collapsed: 70px;
-  --nav-current: var(--nav-w); // será atualizado via TS da sidebar
-  --topbar-h: 60px;
-
-  --nav-bg: var(--p-content-background);           /* slate-900 */
-  --nav-fg: var(--p-text-color);           /* gray-200 */
-  --nav-fg-dim: var(--p-text-color-dim);       /* gray-400 */
-  --nav-active: var(--p-primary-color);       /* blue-400 */
-  --layout-background-light: #F5F5F5;   
-  --secondary-color: #088C4F;
+    --nav-w: 70px; /* largura do menu (atualizada via JS) */
+    --nav-w-collapsed: 70px;
+    --nav-current: var(--nav-w); // será atualizado via TS da sidebar
+    --topbar-h: 60px;
+    --nav-bg: var(--p-content-background); /* slate-900 */
+    --nav-fg: var(--p-text-color); /* gray-200 */
+    --nav-fg-dim: var(--p-text-color-dim); /* gray-400 */
+    --nav-active: var(--p-primary-color); /* blue-400 */
+    --layout-background-light: #f5f5f5;
+    --secondary-color: #088c4f;
 }
 
-form { 
+form {
     --p-floatlabel-active-font-size: 14px;
 }
 
+.panel-filter {
+    --p-panel-content-padding: 1.125rem;
+    --p-button-sm-padding-y: 0.625rem;
+    margin-bottom: 1rem;
+}

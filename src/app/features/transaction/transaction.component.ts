@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { AssetService } from '../../core/entities/asset/asset.service';
 import { BrokerService } from '../../core/entities/broker/broker.service';
 import { TransactionType } from '../../core/entities/transaction/transaction-type.enum';
@@ -15,24 +15,35 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     templateUrl: './transaction.component.html',
     styleUrl: './transaction.component.scss',
 })
-export class TransactionComponent implements OnInit {
+export class TransactionComponent implements OnInit, OnDestroy {
     transactions: TransactionDto[] = [];
     first = 0;
 
     visible = false;
     transactionForm!: FormGroup;
+
     assetOptions: any[] = [];
     brokerOptions: any[] = [];
     loadingAssets = false;
     loadingBrokers = false;
     assetTotalRecords = 0;
     brokerTotalRecords = 0;
+    totalRecords_ = 0;
+    pageSize_ = 10;
 
     transactionTypes = [
         { label: 'Compra', value: TransactionType.BUY },
         { label: 'Venda', value: TransactionType.SELL },
     ];
 
+    private unSubscribe$ = new Subject<void>();
+
+    get totalRecords() {
+        return this.totalRecords_;
+    }
+    get pageSize() {
+        return this.pageSize_;
+    }
     // Removido ngOnInit duplicado
 
     constructor(
@@ -56,24 +67,39 @@ export class TransactionComponent implements OnInit {
             feeValue: [null, [Validators.min(0)]],
             taxValue: [null, [Validators.min(0)]],
             tradeDate: [null, Validators.required],
+            description: [null],
         });
         this.loadTransactions();
     }
 
+    ngOnDestroy(): void {
+        this.unSubscribe$.next();
+        this.unSubscribe$.complete();
+    }
+
     loadTransactions() {
         this.loadingService.show();
+        const page = this.first / this.pageSize;
+        const size = this.pageSize;
         this.transactionService
-            .list()
+            .list(
+                { page, size, filter: {} }
+            )
             .pipe(finalize(() => this.loadingService.hide()))
             .subscribe({
                 next: (res: any) => {
                     this.transactions = res?.content;
+                    this.totalRecords_ = res?.totalElements || 0;
+                    this.pageSize_ = res?.size || 10;
+                    this.first = (res?.number || 0) * this.pageSize;
                 },
             });
     }
 
     pageChange(event: any) {
         this.first = event.first;
+        this.pageSize_ = event.rows;
+        this.loadTransactions();
     }
 
     showDialog() {
@@ -90,20 +116,21 @@ export class TransactionComponent implements OnInit {
             asset: { id: formValue.asset?.id || formValue.asset },
             broker: { id: formValue.broker?.id || formValue.broker },
             type: formValue.type.value || formValue.type,
-            tradeDate:
-                formValue.tradeDate instanceof Date
-                    ? formValue.tradeDate.toISOString().slice(0, 10)
-                    : formValue.tradeDate,
+            tradeDate: new Date(formValue.tradeDate),
             quantity: formValue.quantity,
             price: formValue.price,
             feeValue: formValue.feeValue,
             taxValue: formValue.taxValue,
+            description: formValue.description,
         };
         this.loadingService.show();
         if (dto.id) {
             this.transactionService
                 .update(dto.id, dto)
-                .pipe(finalize(() => this.loadingService.hide()))
+                .pipe(
+                    takeUntil(this.unSubscribe$),
+                    finalize(() => this.loadingService.hide())
+                )
                 .subscribe({
                     next: () => {
                         this.loadTransactions();
@@ -114,7 +141,10 @@ export class TransactionComponent implements OnInit {
         } else {
             this.transactionService
                 .create(dto)
-                .pipe(finalize(() => this.loadingService.hide()))
+                .pipe(
+                    takeUntil(this.unSubscribe$),
+                    finalize(() => this.loadingService.hide())
+                )
                 .subscribe({
                     next: () => {
                         this.loadTransactions();
@@ -157,7 +187,10 @@ export class TransactionComponent implements OnInit {
         this.loadingAssets = true;
         this.assetService
             .listAll()
-            .pipe(finalize(() => (this.loadingAssets = false)))
+            .pipe(
+                finalize(() => (this.loadingAssets = false)),
+                takeUntil(this.unSubscribe$),
+            )
             .subscribe({
                 next: (res: any) => {
                     this.assetOptions = res;
@@ -170,7 +203,10 @@ export class TransactionComponent implements OnInit {
         this.loadingBrokers = true;
         this.brokerService
             .listAll()
-            .pipe(finalize(() => (this.loadingBrokers = false)))
+            .pipe(
+                finalize(() => (this.loadingBrokers = false)),
+                takeUntil(this.unSubscribe$),
+            )
             .subscribe({
                 next: (res: any) => {
                     this.brokerOptions = res;
@@ -192,6 +228,7 @@ export class TransactionComponent implements OnInit {
             feeValue: transaction.feeValue,
             taxValue: transaction.taxValue,
             tradeDate: new Date(transaction.tradeDate),
+            description: transaction.description || null,
         });
         console.log(this.transactionForm.value);
         this.showDialog();

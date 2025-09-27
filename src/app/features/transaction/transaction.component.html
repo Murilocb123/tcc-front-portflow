@@ -1,4 +1,5 @@
-<div class="flex flex-wrap justify-content align-items-center pb-2">
+<p-panel showHeader="false" styleClass="panel-filter">
+ <div class="flex justify-content-between  w-full">
     <button
         pButton
         type="button"
@@ -8,7 +9,8 @@
         size="small"
         (click)="showDialog()"
     ></button>
-</div>
+ </div>
+</p-panel>
 <p-panel>
     <!-- botão para adicionar transação -->
     <ng-template pTemplate="header"> </ng-template>
@@ -16,8 +18,10 @@
     <p-table
         [value]="transactions"
         [paginator]="true"
-        [rows]="10"
+        [rows]="pageSize"
         [first]="first"
+        [lazy]="true"
+        [totalRecords]="totalRecords"
         [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="{first} a {last} de {totalRecords} registros"
@@ -25,7 +29,7 @@
         [rowsPerPageOptions]="[10, 25, 50]"
         [className]="'transaction-table'"
     >
-        <ng-template #header>
+        <ng-template #header>   
             <tr>
                 <th class="text-center">Data</th>
                 <th class="text-center">Ativo</th>
@@ -37,6 +41,7 @@
                 <th class="text-center">Taxas</th>
                 <th class="text-center">Imposto</th>
                 <th class="text-center">Valor Líquido</th>
+                <th class="text-center">Descrição</th>
                 <th class="text-center">Ações</th>
             </tr>
         </ng-template>
@@ -82,8 +87,9 @@
                             | currency: 'BRL' : 'symbol' : '1.2-2'
                     }}
                 </td>
+                <td class="text-center">{{ transaction.description }}</td>
                 <td class="text-center">
-                    <div class="flex items-center justify-center gap-1">
+                    <div class="flex items-center justify-content-center gap-1">
                         <button
                             pButton
                             type="button"
@@ -247,6 +253,18 @@
                 />
                 <label for="tradeDate">Data da transação</label>
             </p-floatlabel>
+        </div>
+        <div class="field col-12 md:col-12 pt-3">
+            <p-floatLabel>
+                <textarea
+                    pTextarea
+                    formControlName="description"
+                    class="w-full"
+                    rows="5"
+                    cols="30"
+                ></textarea>
+                <label for="description">Descrição</label>
+            </p-floatLabel>
         </div>
         <div class="field col-12 md:col-6 pt-3">
             <p-card class="w-full md:w-56">
