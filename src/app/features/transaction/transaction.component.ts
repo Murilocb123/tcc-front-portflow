@@ -62,10 +62,10 @@ export class TransactionComponent implements OnInit, OnDestroy {
             asset: [null, Validators.required],
             type: [null, Validators.required],
             broker: [null, Validators.required],
-            quantity: [null, [Validators.required, Validators.min(0.01)]],
+            quantity: [null, [Validators.required, Validators.min(1)]],
             price: [null, [Validators.required, Validators.min(0.01)]],
-            feeValue: [null, [Validators.min(0)]],
-            taxValue: [null, [Validators.min(0)]],
+            feeValue: [null],
+            taxValue: [null],
             tradeDate: [null, Validators.required],
             description: [null],
         });
@@ -119,8 +119,8 @@ export class TransactionComponent implements OnInit, OnDestroy {
             tradeDate: new Date(formValue.tradeDate),
             quantity: formValue.quantity,
             price: formValue.price,
-            feeValue: formValue.feeValue,
-            taxValue: formValue.taxValue,
+            feeValue: formValue.feeValue || 0,
+            taxValue: formValue.taxValue || 0,
             description: formValue.description,
         };
         this.loadingService.show();

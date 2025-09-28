@@ -22,83 +22,81 @@
 </p-panel>
 
 <p-panel>
-    <div class="card">
-        <p-table
-            [value]="gridData"
-            dataKey="id"
-            [expandedRowKeys]="expandedRows"
-            (onRowExpand)="onRowExpand($event)"
-            (onRowCollapse)="onRowCollapse($event)"
-        >
-        >
-            <ng-template #header>
-                <tr>
-                    <th style="width: 5rem"></th>
-                    <th class="text-center" *ngFor="let col of columns">{{ col.header }}</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-rowData let-expanded="expanded">
-                <tr>
-                    <td>
-                        <p-button
-                            type="button"
-                            pRipple
-                            [pRowToggler]="rowData"
-                            [text]="true"
-                            [rounded]="true"
-                            [plain]="true"
-                            [icon]="
-                                expanded
-                                    ? 'pi pi-chevron-down'
-                                    : 'pi pi-chevron-right'
-                            "
-                        ></p-button>
-                    </td>
-                    <td class="text-center" *ngFor="let col of columns">
-                        {{ getFieldValue(rowData, col.field, col?.path) }}
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template #expandedrow let-rowData>
-                <tr>
-                    <td colspan="7">
-                        <p-table
-                            [value]="rowData.details"
-                            [tableStyle]="{ 'min-width': '50rem' }"
-                        >
-                            <ng-template #header>
-                                <tr>
-                                    <th class="text-center"
-                                        *ngFor="
-                                            let col of columnsHeaderExpanded
-                                        "
-                                    >
-                                        {{ col.header }}
-                                    </th>
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-detail>
-                                <tr>
-                                    <td
+    <p-table
+        [value]="gridData"
+        dataKey="id"
+        [expandedRowKeys]="expandedRows"
+
+    >
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th class="text-center" *ngFor="let col of columns">
+                    {{ col.header }}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rowData let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button
+                        type="button"
+                        pRipple
+                        [pRowToggler]="rowData"
+                        [text]="true"
+                        [rounded]="true"
+                        [plain]="true"
+                    >
+                        <i
+                            class="button-animed pi pi-angle-right"
+                            [ngClass]="{ 'rotated': expanded }"
+                        ></i>
+                    </p-button>
+                </td>
+                <td class="text-center" *ngFor="let col of columns">
+                    {{ getFieldValue(rowData, col.field, col?.path, col?.type) }}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-rowData>
+            <tr class="animed-expanded-table">
+                <td colspan="7">
+                    <p-table
+                        [value]="rowData.details"
+                        stripedRows="true"
+                        styleClass="animed-expanded-table"
+                        dataKey="id"
+                    >
+                        <ng-template #header>
+                            <tr>
+                                <th
                                     class="text-center"
-                                        *ngFor="
-                                            let col of columnsHeaderExpanded
-                                        "
-                                    >
-                                        {{
-                                            getFieldValue(
-                                                detail,
-                                                col.field,
-                                                col?.path
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+                                    *ngFor="let col of columnsHeaderExpanded"
+                                >
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-detail>
+                            <tr>
+                                <td
+                                    class="text-center"
+                                    *ngFor="let col of columnsHeaderExpanded"
+                                >
+                                    {{
+                                        getFieldValue(
+                                            detail,
+                                            col.field,
+                                            col?.path,
+                                            col?.type
+                                        )
+                                    }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </p-panel>

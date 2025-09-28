@@ -1,0 +1,23 @@
+.animed-expanded-table {
+    animation: fadeInSlideDown 0.2s ease;
+
+    @keyframes fadeInSlideDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+.button-animed {
+    transform: rotate(0deg); /* Corrigido para garantir o estado inicial */
+    transition: transform 0.3s ease;
+
+    &.rotated {
+        transform: rotate(90deg); /* Ajustado para garantir a rotação correta */
+    }
+}

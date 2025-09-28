@@ -17,19 +17,19 @@ export class StrategyComponent implements OnInit, OnDestroy {
             value: 'asset',
             columns: [
                 { header: 'Ativo', field: 'asset', path: 'asset.ticker' },
-                { header: 'Quantidade', field: 'quantity' },
-                { header: 'Preço medio', field: 'averagePrice' },
-                { header: 'Valor total', field: 'totalValues' },
-                { header: 'Total de taxas', field: 'totalFees' },
-                { header: 'Total de impostos', field: 'totalTaxes' },
+                { header: 'Quantidade', field: 'quantity', type: 'number' },
+                { header: 'Preço médio', field: 'averagePrice', type: 'currency' },
+                { header: 'Valor total investido', field: 'totalValues', type: 'currency' },
+                { header: 'Total de taxas', field: 'totalFees', type: 'currency' },
+                { header: 'Total de impostos', field: 'totalTaxes', type: 'currency' },
             ],
             columnsExpand: [
                 { header: 'Corretora', field: 'broker', path: 'broker.name' },
-                { header: 'Quantidade', field: 'quantity' },
-                { header: 'Preço medio', field: 'averagePrice' },
-                { header: 'Valor total', field: 'totalValue' },
-                { header: 'Total de taxas', field: 'totalFees' },
-                { header: 'Total de impostos', field: 'totalTaxes' },
+                { header: 'Quantidade', field: 'quantity', type: 'number' },
+                { header: 'Preço médio', field: 'averagePrice', type: 'currency' },
+                { header: 'Valor investido', field: 'totalValue', type: 'currency' },
+                { header: 'Total de taxas', field: 'totalFee', type: 'currency' },
+                { header: 'Total de impostos', field: 'totalTax', type: 'currency' },
             ],
         },
         {
@@ -37,19 +37,19 @@ export class StrategyComponent implements OnInit, OnDestroy {
             value: 'broker',
             columns: [
                 { header: 'Corretora', field: 'broker', path: 'broker.name' },
-                { header: 'Quantidade', field: 'quantity' },
-                { header: 'Preço medio', field: 'averagePrice' },
-                { header: 'Valor total', field: 'totalValues' },
-                { header: 'Total de taxas', field: 'totalFees' },
-                { header: 'Total de impostos', field: 'totalTaxes' },
+                { header: 'Quantidade', field: 'quantity', type: 'number' },
+                { header: 'Preço médio', field: 'averagePrice', type: 'currency' },
+                { header: 'Valor total investido', field: 'totalValues', type: 'currency' },
+                { header: 'Total de taxas', field: 'totalFees', type: 'currency' },
+                { header: 'Total de impostos', field: 'totalTaxes', type: 'currency' },
             ],
             columnsExpand: [
                 { header: 'Ativo', field: 'asset', path: 'asset.ticker' },
-                { header: 'Quantidade', field: 'quantity' },
-                { header: 'Preço medio', field: 'averagePrice' },
-                { header: 'Valor total', field: 'totalValue' },
-                { header: 'Total de taxas', field: 'totalFees' },
-                { header: 'Total de impostos', field: 'totalTaxes' },
+                { header: 'Quantidade', field: 'quantity', type: 'integer' },
+                { header: 'Preço médio', field: 'averagePrice', type: 'currency' },
+                { header: 'Valor investido', field: 'totalValue', type: 'currency' },
+                { header: 'Total de taxas', field: 'totalFee', type: 'currency' },
+                { header: 'Total de impostos', field: 'totalTax', type: 'currency' },
             ],
         },
     ];
@@ -83,7 +83,7 @@ export class StrategyComponent implements OnInit, OnDestroy {
 
     updateGrid(): void {
         this.portfolioAssetService
-            .list({
+            .listStrategies({
                 page: 0,
                 size: 1000,
                 filter: {},
@@ -98,16 +98,6 @@ export class StrategyComponent implements OnInit, OnDestroy {
         // Lógica para expandir ou contrair o grupo
         console.log(group);
         this.expandAll = !this.expandAll;
-    }
-
-    onRowExpand(event: any): void {
-        const rowKey = event.data.asset.name;
-        this.expandedRows[rowKey] = true;
-    }
-
-    onRowCollapse(event: any): void {
-        const rowKey = event.data.asset.name;
-        delete this.expandedRows[rowKey];
     }
 
     expandAllRows(): void {
@@ -125,11 +115,35 @@ export class StrategyComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe$.complete();
     }
 
-    getFieldValue(item: any, field: string, path: string | undefined): any {
-        if (path) {
-            return path.split('.').reduce((obj, key) => obj?.[key], item);
-        }   
-        return item[field];
+    getFieldValue(rowData: any, field: string, path?: string, type?: string): any {
+        let value = path ? this.resolvePath(rowData, path) : rowData[field];
+
+        if (type) {
+            switch (type) {
+                case 'currency':
+                    value = value
+                        ? value.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                          })
+                        : '-';
+                    break;
+                case 'date':
+                    value = value ? new Date(value).toLocaleDateString('pt-BR') : '-';
+                    break;
+                case 'number':
+                    value = value ? value.toLocaleString('pt-BR') : '-';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return value;
+    }
+
+    private resolvePath(obj: any, path: string): any {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
     }
 
     private groupContent(data: any[]): any[] {
@@ -179,6 +193,7 @@ export class StrategyComponent implements OnInit, OnDestroy {
 
     private initGroup(item: any, field: string): any {
         return {
+            id: item[field]?.id || item[field]?.name || item[field],
             [field]: item[field],
             quantity: 0,
             totalValue: 0,
