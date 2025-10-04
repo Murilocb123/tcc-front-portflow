@@ -21,6 +21,7 @@ import { PanelInfoComponent } from './panel-info/panel-info.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { PlotlyChartComponent } from './plottly/plotly.component';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { CheckboxModule } from 'primeng/checkbox';
         NavbarComponent,
         TopbarComponent,
         PanelInfoComponent,
+        PlotlyChartComponent
     ],
     imports: [
         CommonModule,
@@ -49,6 +51,6 @@ import { CheckboxModule } from 'primeng/checkbox';
         InputTextModule,
         CheckboxModule 
     ],
-    exports: [MainLayoutComponent, PanelInfoComponent],
+    exports: [MainLayoutComponent, PanelInfoComponent, PlotlyChartComponent],
 })
 export class SharedModule {}

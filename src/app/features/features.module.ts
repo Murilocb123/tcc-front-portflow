@@ -31,6 +31,7 @@ import { LoadingPageService } from '../shared/loading-page/loading-page.service'
 import { EventsComponent } from './events/events.component';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { ListboxModule } from 'primeng/listbox';
 
 
 
@@ -62,7 +63,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
         ProgressSpinnerModule,
         TextareaModule,
         SelectButtonModule,
-        FormsModule
+        FormsModule,
+        ListboxModule,
     ],
     providers: [MessageService, ConfirmationService, LoadingPageService],
 })

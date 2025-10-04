@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject, finalize, takeUntil } from 'rxjs';
 import { PortfolioAssetService } from '../../core/entities/portfolio-asset/portfolio-asset.service';
+import { AssetService } from '../../core/entities/asset/asset.service';
+import { BrokerService } from '../../core/entities/broker/broker.service';
 
 @Component({
     selector: 'app-strategy',
@@ -71,14 +74,33 @@ export class StrategyComponent implements OnInit, OnDestroy {
         return group ? group.columnsExpand : [];
     }
 
+    assetForm!: FormGroup;
+
+    visible = false;
+
+    loadingAssets = false;
+    loadingBrokers = false;
+
+    assetOptions: any[] = [];
+    brokerOptions: any[] = [];
+
     private ngUnsubscribe$ = new Subject<void>();
 
     constructor(
         private readonly portfolioAssetService: PortfolioAssetService,
+        private readonly fb: FormBuilder, // Adicionado para inicializar o FormBuilder
+        private readonly assetService: AssetService, // Adicionado para carregar ativos
+        private readonly brokerService: BrokerService // Adicionado para carregar corretoras
     ) {}
 
     ngOnInit(): void {
         this.updateGrid();
+        this.assetForm = this.fb.group({
+        asset: [null as any, Validators.required],
+        broker: [null as any, Validators.required],
+        averagePrice: [null, [Validators.required, Validators.min(0.01)]],
+        quantity: [null, [Validators.required, Validators.min(1)]],
+    });
     }
 
     updateGrid(): void {
@@ -204,5 +226,45 @@ export class StrategyComponent implements OnInit, OnDestroy {
             averagePriceQty: 0,
             details: [],
         };
+    }
+
+    openAssetModal(): void {
+        this.visible = true;
+        this.findAllAssets();
+        this.findAllBrokers();
+    }
+
+    saveAsset(): void {
+        if (this.assetForm.invalid) return;
+        const formValue = this.assetForm.value;
+        const assetData = {
+            asset: { id: formValue.asset?.id || formValue.asset },
+            broker: { id: formValue.broker?.id || formValue.broker },
+            averagePrice: formValue.averagePrice,
+        };
+        console.log('Saving asset:', assetData);
+        // Adicione aqui a lógica para salvar o ativo
+        this.visible = false;
+        this.assetForm.reset();
+    }
+
+    findAllAssets(): void {
+        this.loadingAssets = true;
+        this.assetService
+            .list({ page: 0, size: 1000 })
+            .pipe(finalize(() => (this.loadingAssets = false)))
+            .subscribe((res: any) => {
+                this.assetOptions = res?.content || [];
+            });
+    }
+
+    findAllBrokers(): void {
+        this.loadingBrokers = true;
+        this.brokerService
+            .list({ page: 0, size: 1000 })
+            .pipe(finalize(() => (this.loadingBrokers = false)))
+            .subscribe((res: any) => {
+                this.brokerOptions = res?.content || [];
+            });
     }
 }

@@ -33,16 +33,14 @@
 }
 
 .loading-overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
+    width: 100%;
+    height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    //fadein and fadeout
-    animation: fadeIn 0.9s ease-in-out, fadeOut 0.9s ease-in-out 0.9s;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.37);
+    z-index: 10;
 }

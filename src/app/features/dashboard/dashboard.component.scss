@@ -1,0 +1,63 @@
+
+.grid-overview {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-detailed {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.card :host ::ng-deep .p-card-body {
+  padding: 12px;
+}
+
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.empty {
+  padding: 20px;
+  opacity: 0.85;
+}
+
+.totals {
+  grid-column: 1 / -1; /* ocupar largura total */
+}
+
+.totals-card :host ::ng-deep .p-card-body {
+  padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+
+.total-item {
+  background: #f6f7f9;
+  border: 1px solid #e8eaef;
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 4px;
+}
+.total-label { font-size: 12px; opacity: .8; }
+.total-value { font-size: 18px; font-weight: 600; }
+
+@media (max-width: 900px) {
+  .grid-overview { grid-template-columns: 1fr; }
+  .totals-grid { grid-template-columns: 1fr; }
+}

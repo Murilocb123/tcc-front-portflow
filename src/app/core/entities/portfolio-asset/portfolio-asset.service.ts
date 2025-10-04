@@ -4,6 +4,7 @@ import { PortfolioAssetDTO } from './portfolio-asset.dto';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { StrategyDTO } from './strategy.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -26,10 +27,11 @@ export class PortfolioAssetService extends EntitiesService<PortfolioAssetDTO> {
 
     listStrategies(params?: PageRequest): any {
 
-        return this.executeRequest<PortfolioAssetDTO[]>(
+        return this.executeRequest<StrategyDTO[]>(
             HttpMethod.GET,
             '/strategies',
-            { params } 
+            undefined,
+            params  
         );
     }
 }

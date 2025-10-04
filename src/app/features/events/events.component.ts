@@ -88,7 +88,11 @@ export class EventsComponent implements OnInit {
     }
 
     saveEvent() {
-        if (this.eventForm.invalid) return;
+        this.loadingService.show();
+        if (this.eventForm.invalid) {
+            this.loadingService.hide();
+            return;
+        }
         const formValue = this.eventForm.value;
         const dto: EventDto = {
             id: formValue.id,
@@ -99,7 +103,6 @@ export class EventsComponent implements OnInit {
             totalValue: formValue.totalValue,
             notes: formValue.notes,
         };
-        this.loadingService.show();
         if (dto.id) {
             this.eventService
                 .update(dto.id, dto)

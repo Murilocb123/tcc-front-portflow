@@ -17,7 +17,7 @@ export interface PageRequest {
     page: number;
     size: number;
     sort?: string;
-    filter: { [key: string]: any };
+    filter?: { [key: string]: any };
 }
 
 @Injectable({

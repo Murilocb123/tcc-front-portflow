@@ -8,6 +8,7 @@
             icon="pi pi-plus"
             class="p-button-success"
             size="small"
+            (click)="openAssetModal()"
         ></button>
         <div class="flex align-items-center gap-2">
             <label for="groupBy" class="w-12rem text-right">Agrupar por:</label>
@@ -22,12 +23,7 @@
 </p-panel>
 
 <p-panel>
-    <p-table
-        [value]="gridData"
-        dataKey="id"
-        [expandedRowKeys]="expandedRows"
-
-    >
+    <p-table [value]="gridData" dataKey="id" [expandedRowKeys]="expandedRows">
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
@@ -49,18 +45,20 @@
                     >
                         <i
                             class="button-animed pi pi-angle-right"
-                            [ngClass]="{ 'rotated': expanded }"
+                            [ngClass]="{ rotated: expanded }"
                         ></i>
                     </p-button>
                 </td>
                 <td class="text-center" *ngFor="let col of columns">
-                    {{ getFieldValue(rowData, col.field, col?.path, col?.type) }}
+                    {{
+                        getFieldValue(rowData, col.field, col?.path, col?.type)
+                    }}
                 </td>
             </tr>
         </ng-template>
         <ng-template #expandedrow let-rowData>
             <tr class="animed-expanded-table">
-                <td colspan="7">
+                <td [attr.colspan]="columns.length + 1">
                     <p-table
                         [value]="rowData.details"
                         stripedRows="true"
@@ -98,5 +96,109 @@
                 </td>
             </tr>
         </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td
+                    colspan="11"
+                    class="flex-row justify-content-center align-items-center text-center w-full"
+                >
+                    <i
+                        class="pi pi-info-circle"
+                        style="font-size: 2rem; color: var(--p-primary-color)"
+                    ></i>
+                    <h3 class="w-full text-center">
+                        Nenhuma transação encontrada.
+                    </h3>
+                </td>
+            </tr>
+        </ng-template>
     </p-table>
 </p-panel>
+
+<!-- Mover para um componente separado futuramente -->
+<p-dialog
+    header="Adicionar Ativo"
+    [(visible)]="visible"
+    [modal]="true"
+    [draggable]="true"
+    [resizable]="true"
+    styleClass="w-full lg:w-6"
+>
+    <form [formGroup]="assetForm" class="formgrid grid pt-2">
+        <div class="field col-12 md:col-6 pt-3">
+            <p-floatlabel class="w-full md:w-56">
+                <p-select
+                    formControlName="asset"
+                    inputId="asset"
+                    [options]="assetOptions"
+                    optionLabel="ticker"
+                    [virtualScroll]="true"
+                    [lazy]="true"
+                    [filter]="true"
+                    [loading]="loadingAssets"
+                    [virtualScrollItemSize]="40"
+                    [showClear]="true"
+                    class="w-full"
+                    appendTo="body"
+                ></p-select>
+                <label for="asset">Ativo</label>
+            </p-floatlabel>
+        </div>
+        <div class="field col-12 md:col-6 pt-3">
+            <p-floatlabel class="w-full md:w-56">
+                <p-select
+                    formControlName="broker"
+                    inputId="broker"
+                    [options]="brokerOptions"
+                    optionLabel="name"
+                    [virtualScroll]="true"
+                    [lazy]="true"
+                    [filter]="true"
+                    [loading]="loadingBrokers"
+                    [virtualScrollItemSize]="40"
+                    [showClear]="true"
+                    class="w-full"
+                    appendTo="body"
+                ></p-select>
+                <label for="broker">Corretora</label>
+            </p-floatlabel>
+        </div>
+        <div class="field col-12 md:col-6 pt-3">
+            <p-floatLabel>
+                <p-inputNumber
+                    formControlName="averagePrice"
+                    mode="currency"
+                    currency="BRL"
+                    locale="pt-BR"
+                    minFractionDigits="2"
+                    maxFractionDigits="6"
+                    min="0"
+                    class="w-full"
+                ></p-inputNumber>
+                <label for="averagePrice">Preço Médio</label>
+            </p-floatLabel>
+        </div>
+        <div class="field col-12 md:col-6 pt-3">
+            <p-floatLabel>
+                <p-inputNumber
+                    formControlName="quantity"
+                    mode="decimal"
+                    locale="pt-BR"
+                    minFractionDigits="0"
+                    maxFractionDigits="0"
+                    min="1"
+                    class="w-full"
+                ></p-inputNumber>
+                <label for="quantity">Quantidade</label>
+            </p-floatLabel>
+        </div>
+        <div class="field col-12 md:col-12 pt-3">
+            <button
+                pButton
+                type="submit"
+                label="Salvar"
+                class="p-button-success"
+            ></button>
+        </div>
+    </form>
+</p-dialog>

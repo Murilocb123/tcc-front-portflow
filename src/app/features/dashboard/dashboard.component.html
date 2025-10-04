@@ -1,7 +1,147 @@
-<div>
-    <div>
-        <p-panel >
-           <h1  >Dashboard</h1>
+<!-- Alternância entre visões -->
+<p-panel showHeader="false" styleClass="panel-filter">
+    <div class="flex justify-content-center w-full">
+        <p-selectbutton
+            [options]="stateOptions"
+            [(ngModel)]="valueSelected"
+            optionLabel="label"
+            optionValue="value"
+            aria-labelledby="basic"
+            allowEmpty="false"
+        ></p-selectbutton>
+    </div>
+</p-panel>
+
+<!-- VISÃO GERAL -->
+<div *ngIf="valueSelected === 'overview'" class="grid-overview">
+    <div class="totals">
+        <p-panel header="Totalizadores" styleClass="card totals-card">
+            <div class="totals-grid">
+                <div class="total-item">
+                    <span class="total-label">Patrimônio total</span>
+                    <span class="total-value">R$ 125.450,00</span>
+                </div>
+                <div class="total-item">
+                    <span class="total-label">Rentabilidade total</span>
+                    <span class="total-value">+12,4%</span>
+                </div>
+                <div class="total-item">
+                    <span class="total-label">Renda total</span>
+                    <span class="total-value">R$ 7.350,00</span>
+                </div>
+            </div>
         </p-panel>
-    </div>  
+    </div>
+    <!-- Rentabilidade diária (consolidado) -->
+    <p-panel header="Rentabilidade diária (consolidado)" styleClass="card">
+        <ng-container *ngIf="hasGeralData(); else emptyGeral">
+            <app-plotly-chart
+                [data]="rentabilidadeDiariaData"
+                [layout]="rentabilidadeDiariaLayout"
+            >
+            </app-plotly-chart>
+        </ng-container>
+        <ng-template #emptyGeral>
+            <div class="empty">
+                Não há dados para exibir. Cadastre transações e/ou ativos para
+                visualizar a rentabilidade diária.
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <!-- Renda mensal -->
+    <p-panel header="Renda mensal" styleClass="card">
+        <ng-container *ngIf="hasGeralData(); else emptyMensal">
+            <app-plotly-chart
+                [data]="rendaMensalData"
+                [layout]="rendaMensalLayout"
+            >
+            </app-plotly-chart>
+        </ng-container>
+        <ng-template #emptyMensal>
+            <div class="empty">
+                Sem dados de renda mensal. Importe ou cadastre transações para
+                este período.
+            </div>
+        </ng-template>
+    </p-panel>
+</div>
+
+<!-- VISÃO DETALHADA -->
+<!-- VISÃO DETALHADA (watchlist lateral estilo TradingView) -->
+<div *ngIf="valueSelected === 'detailed'" class="grid">
+    <!-- Watchlist lateral -->
+
+    <!-- Área principal de gráficos -->
+    <div class="col-10">
+        <p-panel>
+            <!-- rentabilidade por ativo e previsao -->
+            <p-tabs value="rentabilidade">
+                <p-tablist>
+                    <p-tab value="rentabilidade">Rentabilidade</p-tab>
+                    <p-tab value="projecao">Projeção</p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel value="rentabilidade">
+                        <app-plotly-chart
+                            [data]="rentPorAtivoData"
+                            [layout]="rentPorAtivoLayout"
+                        >
+                        </app-plotly-chart>
+                    </p-tabpanel>
+                    <p-tabpanel value="projecao">
+                        <app-plotly-chart
+                            [data]="forecastData"
+                            [layout]="forecastLayout"
+                        >
+                        </app-plotly-chart>
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </p-panel>
+    </div>
+    <div class="col-2">
+        <p-panel >
+            <ng-template #header>
+                <div class="w-full flex justify-content-center align-items-start pt-0">
+                    <span class="vertical-align-top vertical-align-text-top text-lg	">Ativos na carteira</span>
+                </div>
+            </ng-template>
+            <p-listbox
+                [options]="filteredAtivos"
+                [(ngModel)]="ativoSelecionado"
+                optionValue="value"
+                [filter]="true"
+                [listStyle]="{ 'max-height': '520px' }"
+                (onChange)="onAssetChange($event.value)"
+            >
+                <ng-template let-opt pTemplate="item">
+                    <div
+                        class="watch-item"
+                        [ngClass]="{ selected: opt.value === ativoSelecionado }"
+                    >
+                        <div class="sym-row">
+                            <span class="sym">{{ opt.value }}</span>
+                            <span class="name">{{ opt.name }}</span>
+                        </div>
+                        <div class="px-row">
+                            <span class="last">{{
+                                opt.last | number: '1.2-2'
+                            }}</span>
+                            <span
+                                class="chg"
+                                [ngClass]="{
+                                    up: opt.change >= 0,
+                                    down: opt.change < 0,
+                                }"
+                            >
+                                {{ opt.change >= 0 ? '+' : ''
+                                }}{{ opt.change | number: '1.2-2' }}%
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </p-panel>
+    </div>
 </div>
