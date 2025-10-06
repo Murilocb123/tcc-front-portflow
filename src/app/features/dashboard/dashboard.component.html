@@ -19,15 +19,15 @@
             <div class="totals-grid">
                 <div class="total-item">
                     <span class="total-label">Patrimônio total</span>
-                    <span class="total-value">R$ 125.450,00</span>
+                    <span class="total-value">{{ totalPortfolioValue | currency: 'BRL':'symbol':'1.2-2' }}</span>
                 </div>
                 <div class="total-item">
                     <span class="total-label">Rentabilidade total</span>
-                    <span class="total-value">+12,4%</span>
+                    <span class="total-value">{{ totalReturnPercent | number: '1.2-2' }}%</span>
                 </div>
                 <div class="total-item">
                     <span class="total-label">Renda total</span>
-                    <span class="total-value">R$ 7.350,00</span>
+                    <span class="total-value">{{ totalIncomeValue | currency: 'BRL':'symbol':'1.2-2' }}</span>
                 </div>
             </div>
         </p-panel>

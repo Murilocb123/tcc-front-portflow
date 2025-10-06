@@ -1,4 +1,4 @@
-import { NgModule, provideZoneChangeDetection } from '@angular/core';
+import { NgModule, provideZoneChangeDetection, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { provideHttpClient, withFetch } from '@angular/common/http';
@@ -12,7 +12,10 @@ import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import ptBR from "primelocale/pt-BR.json";
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 
+registerLocaleData(localePt, 'pt-BR');
 
 const MyTheme = definePreset(Aura, {
     semantic: {
@@ -43,6 +46,7 @@ const MyTheme = definePreset(Aura, {
                 },
             },
         }),
+        { provide: LOCALE_ID, useValue: 'pt-BR' }, // Define a localização padrão para pt-BR
     ],
     bootstrap: [AppComponent],
 })

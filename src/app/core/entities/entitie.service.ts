@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
 export enum HttpMethod {
@@ -80,7 +80,7 @@ export abstract class EntitiesService<T> {
         endpoint: string,
         body?: any,
         params?: any,
-    ) {
+    ): Observable<HttpEvent<T>> {
         const url = `${this.API_URL}${this.BASE_ROUTE}${endpoint}`;
         let headers: { [key: string]: string } = {
             'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export abstract class EntitiesService<T> {
         );
     }
 
-    private defaultCatchError(error: any) {
+    public defaultCatchError(error: any) {
         if (error.status === 401 || error.status === 403) {
             this.messageService.add({
                 severity: 'error',
