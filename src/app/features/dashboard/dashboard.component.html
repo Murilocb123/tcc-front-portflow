@@ -19,63 +19,93 @@
             <div class="totals-grid">
                 <div class="total-item">
                     <span class="total-label">Patrimônio total</span>
-                    <span class="total-value">{{ totalPortfolioValue | currency: 'BRL':'symbol':'1.2-2' }}</span>
+                    <span class="total-value">{{
+                        totalPortfolioValue
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
+                    }}</span>
                 </div>
                 <div class="total-item">
                     <span class="total-label">Rentabilidade total</span>
-                    <span class="total-value">{{ totalReturnPercent | number: '1.2-2' }}%</span>
+                    <span class="total-value"
+                        >{{ totalReturnPercent | number: '1.2-2' }}%</span
+                    >
                 </div>
                 <div class="total-item">
                     <span class="total-label">Renda total</span>
-                    <span class="total-value">{{ totalIncomeValue | currency: 'BRL':'symbol':'1.2-2' }}</span>
+                    <span class="total-value">{{
+                        totalIncomeValue | currency: 'BRL' : 'symbol' : '1.2-2'
+                    }}</span>
                 </div>
             </div>
         </p-panel>
     </div>
-    <!-- Rentabilidade diária (consolidado) -->
-    <p-panel header="Rentabilidade diária (consolidado)" styleClass="card">
+    <!-- Rentabilidade diária (ultimos 12 meses) -->
+    <p-panel header="Rentabilidade diária (últimos 12 meses)" styleClass="card">
         <ng-container *ngIf="hasGeralData(); else emptyGeral">
-            <app-plotly-chart
-                [data]="rentabilidadeDiariaData"
-                [layout]="rentabilidadeDiariaLayout"
-            >
-            </app-plotly-chart>
+            <div class="dashboard">
+                <div class="chart-container">
+                    <p-chart
+                        type="line"
+                        [data]="rentabilidadeDiariaChartData"
+                        [options]="rentabilidadeDiariaChartOptions"
+                        responsive="true"
+                    ></p-chart>
+                </div>
+            </div>
         </ng-container>
         <ng-template #emptyGeral>
-            <div class="empty">
-                Não há dados para exibir. Cadastre transações e/ou ativos para
-                visualizar a rentabilidade diária.
+            <div class="empty flex flex-column align-items-center justify-content-center">
+                   <i
+                        class="pi pi-info-circle"
+                        style="font-size: 2rem; color: var(--p-primary-color)"
+                    ></i>
+                    <br />
+                Sem dados de rentabilidade. Cadastre transações para
             </div>
         </ng-template>
     </p-panel>
 
     <!-- Renda mensal -->
-    <p-panel header="Renda mensal" styleClass="card">
+    <p-panel header="Renda mensal (últimos 12 meses)" styleClass="card">
         <ng-container *ngIf="hasGeralData(); else emptyMensal">
-            <app-plotly-chart
-                [data]="rendaMensalData"
-                [layout]="rendaMensalLayout"
-            >
-            </app-plotly-chart>
+            <div class="dashboard">
+                <div class="chart-container">
+                    <p-chart
+                        type="bar"
+                        [data]="rendaMensalChartData"
+                        [options]="rendaMensalChartOptions"
+                        responsive="true"
+                    ></p-chart>
+                </div>
+            </div>
         </ng-container>
         <ng-template #emptyMensal>
-            <div class="empty">
-                Sem dados de renda mensal. Importe ou cadastre transações para
-                este período.
+            <div class="empty flex flex-column align-items-center justify-content-center">
+                     <i
+                            class="pi pi-info-circle"
+                            style="font-size: 2rem; color: var(--p-primary-color)"
+                      ></i>
+                      <br />
+                 Sem dados de renda. Cadastre eventos para obter renda.
             </div>
         </ng-template>
     </p-panel>
 </div>
+
+
+
+
+
 
 <!-- VISÃO DETALHADA -->
 <!-- VISÃO DETALHADA (watchlist lateral estilo TradingView) -->
 <div *ngIf="valueSelected === 'detailed'" class="grid">
     <!-- Watchlist lateral -->
 
-    <!-- Área principal de gráficos -->
     <div class="col-10">
+        <!-- 
         <p-panel>
-            <!-- rentabilidade por ativo e previsao -->
+            
             <p-tabs value="rentabilidade">
                 <p-tablist>
                     <p-tab value="rentabilidade">Rentabilidade</p-tab>
@@ -83,28 +113,50 @@
                 </p-tablist>
                 <p-tabpanels>
                     <p-tabpanel value="rentabilidade">
-                        <app-plotly-chart
-                            [data]="rentPorAtivoData"
-                            [layout]="rentPorAtivoLayout"
+                        <p-panel
+                            header="Rentabilidade por Ativo"
+                            styleClass="card"
                         >
-                        </app-plotly-chart>
+                            <div class="dashboard">
+                                <div class="chart-container">
+                                    <p-chart
+                                        type="line"
+                                        [data]="rentPorAtivoChartData"
+                                        [options]="rentPorAtivoChartOptions"
+                                        class="h-[30rem]"
+                                    ></p-chart>
+                                </div>
+                            </div>
+                        </p-panel>
                     </p-tabpanel>
                     <p-tabpanel value="projecao">
-                        <app-plotly-chart
-                            [data]="forecastData"
-                            [layout]="forecastLayout"
-                        >
-                        </app-plotly-chart>
+                        <p-panel header="Previsão por Ativo" styleClass="card">
+                            <div class="dashboard">
+                                <div class="chart-container">
+                                    <p-chart
+                                        type="line"
+                                        [data]="forecastChartData"
+                                        [options]="forecastChartOptions"
+                                        style="height: 300px"
+                                    ></p-chart>
+                                </div>
+                            </div>
+                        </p-panel>
                     </p-tabpanel>
                 </p-tabpanels>
             </p-tabs>
         </p-panel>
     </div>
     <div class="col-2">
-        <p-panel >
+        <p-panel>
             <ng-template #header>
-                <div class="w-full flex justify-content-center align-items-start pt-0">
-                    <span class="vertical-align-top vertical-align-text-top text-lg	">Ativos na carteira</span>
+                <div
+                    class="w-full flex justify-content-center align-items-start pt-0"
+                >
+                    <span
+                        class="vertical-align-top vertical-align-text-top text-lg"
+                        >Ativos na carteira</span
+                    >
                 </div>
             </ng-template>
             <p-listbox
@@ -143,5 +195,5 @@
                 </ng-template>
             </p-listbox>
         </p-panel>
-    </div>
+    </div> -->
 </div>

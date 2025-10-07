@@ -20,6 +20,7 @@
         "@fontsource/montserrat": "^5.2.6",
         "@primeng/themes": "^19.1.4",
         "angular": "^1.8.3",
+        "chart.js": "^4.5.0",
         "plotly.js": "^3.1.1",
         "plotly.js-dist-min": "^3.1.1",
         "primeflex": "^4.0.0",

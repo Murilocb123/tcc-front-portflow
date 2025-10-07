@@ -32,6 +32,7 @@ import { EventsComponent } from './events/events.component';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ListboxModule } from 'primeng/listbox';
+import { ChartModule } from 'primeng/chart';
 
 
 
@@ -65,6 +66,7 @@ import { ListboxModule } from 'primeng/listbox';
         SelectButtonModule,
         FormsModule,
         ListboxModule,
+        ChartModule 
     ],
     providers: [MessageService, ConfirmationService, LoadingPageService],
 })
