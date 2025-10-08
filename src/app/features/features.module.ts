@@ -33,11 +33,20 @@ import { TextareaModule } from 'primeng/textarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ListboxModule } from 'primeng/listbox';
 import { ChartModule } from 'primeng/chart';
-
-
+import { OverviewComponent } from './dashboard/components/overview/overview.component';
+import { DetailedComponent } from './dashboard/components/detailed/detailed.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
-    declarations: [LoginAndRegisterComponent, DashboardComponent, StrategyComponent, TransactionComponent, EventsComponent],
+    declarations: [
+        LoginAndRegisterComponent,
+        DashboardComponent,
+        StrategyComponent,
+        TransactionComponent,
+        EventsComponent,
+        OverviewComponent,
+        DetailedComponent,
+    ],
     imports: [
         CommonModule,
         ButtonModule,
@@ -57,7 +66,7 @@ import { ChartModule } from 'primeng/chart';
         DialogModule,
         DropdownModule,
         InputNumberModule,
-        DatePickerModule,   
+        DatePickerModule,
         DividerModule,
         SelectModule,
         ConfirmDialogModule,
@@ -66,7 +75,8 @@ import { ChartModule } from 'primeng/chart';
         SelectButtonModule,
         FormsModule,
         ListboxModule,
-        ChartModule 
+        ChartModule,
+        NgApexchartsModule,
     ],
     providers: [MessageService, ConfirmationService, LoadingPageService],
 })

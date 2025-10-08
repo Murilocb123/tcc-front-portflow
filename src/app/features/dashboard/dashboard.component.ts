@@ -143,6 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private configureChartOptions(): void {
         // Opções do gráfico de rentabilidade diária
         this.rentabilidadeDiariaChartOptions = {
+            maintainAspectRatio: false,
             responsive: true,
             plugins: {
                 legend: {
@@ -183,6 +184,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         // Opções do gráfico de renda mensal
         this.rendaMensalChartOptions = {
+            maintainAspectRatio: false,
             responsive: true,
             plugins: {
                 legend: {

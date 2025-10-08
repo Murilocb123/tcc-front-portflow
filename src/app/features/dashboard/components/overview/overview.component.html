@@ -1,0 +1,101 @@
+<div class="grid-overview">
+    <div class="totals">
+        <p-panel header="Totalizadores" styleClass="card totals-card">
+            <div class="totals-grid">
+                <div class="total-item">
+                    <span class="total-label">Patrimônio total</span>
+                    <span class="total-value">{{
+                        totalPortfolioValue
+                            | currency: 'BRL' : 'symbol' : '1.2-2'
+                    }}</span>
+                </div>
+                <div class="total-item">
+                    <span class="total-label">Rentabilidade total</span>
+                    <span class="total-value"
+                        >{{ totalReturnPercent | number: '1.2-2' }}%</span
+                    >
+                </div>
+                <div class="total-item">
+                    <span class="total-label">Renda total</span>
+                    <span class="total-value">{{
+                        totalIncomeValue | currency: 'BRL' : 'symbol' : '1.2-2'
+                    }}</span>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+    <!-- Rentabilidade diária (últimos 12 meses) -->
+    <p-panel header="Rentabilidade diária (últimos 12 meses)" styleClass="card">
+        <ng-container *ngIf="hasGeralData(); else emptyGeral">
+            <div class="dashboard">
+                <div class="chart-container">
+                    <apx-chart
+                        [series]="rentabilidadeDiariaOptions.series"
+                        [chart]="rentabilidadeDiariaOptions.chart"
+                        [xaxis]="rentabilidadeDiariaOptions.xaxis"
+                        [yaxis]="rentabilidadeDiariaOptions.yaxis"
+                        [stroke]="rentabilidadeDiariaOptions.stroke"
+                        [tooltip]="rentabilidadeDiariaOptions.tooltip"
+                        [annotations]="rentabilidadeDiariaOptions.annotations"
+                        [dataLabels]="rentabilidadeDiariaOptions.dataLabels"
+                        [markers]="rentabilidadeDiariaOptions.markers"
+                        [title]="rentabilidadeDiariaOptions.title"
+                        [fill]="rentabilidadeDiariaOptions.fill"
+                        [colors]="rentabilidadeDiariaOptions.colors"
+                        [plotOptions]="rentabilidadeDiariaOptions.options"
+                        height="400px"
+                    ></apx-chart>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #emptyGeral>
+            <div
+                class="empty flex flex-column align-items-center justify-content-center"
+            >
+                <i
+                    class="pi pi-info-circle"
+                    style="font-size: 2rem; color: var(--p-primary-color)"
+                ></i>
+                <br />
+                Sem dados de rentabilidade. Cadastre transações para
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <!-- Renda mensal -->
+    <p-panel header="Renda mensal (últimos 12 meses)" styleClass="card">
+        <ng-container *ngIf="hasGeralData(); else emptyMensal">
+            <div class="dashboard">
+                <div class="chart-container">
+                    <apx-chart
+                        [series]="rendaMensalOptions.series"
+                        [chart]="rendaMensalOptions.chart"
+                        [xaxis]="rendaMensalOptions.xaxis"
+                        [yaxis]="rendaMensalOptions.yaxis"
+                        [stroke]="rendaMensalOptions.stroke"
+                        [tooltip]="rendaMensalOptions.tooltip"
+                        [dataLabels]="rendaMensalOptions.dataLabels"
+                        [markers]="rendaMensalOptions.markers"
+                        [title]="rendaMensalOptions.title"
+                        [fill]="rendaMensalOptions.fill"
+                        [colors]="rendaMensalOptions.colors"
+                        [plotOptions]="rendaMensalOptions.options"
+                        height="400px"
+                    ></apx-chart>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #emptyMensal>
+            <div
+                class="empty flex flex-column align-items-center justify-content-center"
+            >
+                <i
+                    class="pi pi-info-circle"
+                    style="font-size: 2rem; color: var(--p-primary-color)"
+                ></i>
+                <br />
+                Sem dados de renda. Cadastre eventos para obter renda.
+            </div>
+        </ng-template>
+    </p-panel>
+</div>
