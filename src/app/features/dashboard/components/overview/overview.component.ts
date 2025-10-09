@@ -1,41 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import ptBrApex from 'apexcharts/dist/locales/pt-br.json';
-import {
-    ApexAnnotations,
-    ApexAxisChartSeries,
-    ApexChart,
-    ApexDataLabels,
-    ApexFill,
-    ApexMarkers,
-    ApexPlotOptions,
-    ApexStroke,
-    ApexTitleSubtitle,
-    ApexTooltip,
-    ApexXAxis,
-    ApexYAxis,
-    ChartType
-} from 'ng-apexcharts';
+import { ChartType } from 'ng-apexcharts';
 import { catchError, finalize, Subject, takeUntil } from 'rxjs';
 import { DashboardService } from '../../../../core/entities/dashboard/dashboard.service';
 import { OverviewDashboardDTO } from '../../../../core/entities/dashboard/dto/overview-dashboard.dto';
 import { LoadingPageService } from '../../../../shared/loading-page/loading-page.service';
-
-export type ChartOptions = {
-    series: ApexAxisChartSeries;
-    chart: ApexChart;
-    dataLabels: ApexDataLabels;
-    markers: ApexMarkers;
-    title: ApexTitleSubtitle;
-    fill: ApexFill;
-    yaxis: ApexYAxis;
-    xaxis: ApexXAxis;
-    tooltip: ApexTooltip;
-    stroke: ApexStroke;
-    annotations: ApexAnnotations;
-    colors: any;
-    toolbar: any;
-    options: ApexPlotOptions;
-};
+import { ChartOptions } from '../../../../shared/model/chart-options';
 
 @Component({
     selector: 'app-overview',
@@ -44,32 +14,6 @@ export type ChartOptions = {
     styleUrl: './overview.component.scss',
 })
 export class OverviewComponent implements OnInit, OnDestroy {
-    rentabilidadeDiariaAnnotations: ApexAnnotations = {
-        yaxis: [
-            {
-                y: 0,
-                borderColor: '#1DD65A',
-                strokeDashArray: 4,
-                label: {
-                    style: {
-                        color: '#fff',
-                        background: '#1DD65A',
-                    },
-                },
-            },
-        ],
-    };
-    // ---------------- Alternância de visão (RF009.3) ----------------
-    valueSelected: 'overview' | 'detailed' = 'overview';
-    stateOptions = [
-        { label: 'Visão geral', value: 'overview' },
-        { label: 'Visão detalhada', value: 'detailed' },
-    ];
-
-    // =================================================================
-    // =                           VISÃO GERAL                         =
-    // =================================================================
-
     totalPortfolioValue: number = 0;
     totalReturnPercent: number = 0;
     totalIncomeValue: number = 0;
@@ -108,6 +52,19 @@ export class OverviewComponent implements OnInit, OnDestroy {
         },
         tooltip: {
             x: { format: 'dd/MM/yyyy' },
+            y:{
+                formatter: (value: number, { w , seriesIndex, dataPointIndex}) => {
+                    //path w.config.series.0.data.0.cumulativeValueGain
+                    const point = w.config.series[seriesIndex].data[dataPointIndex];
+
+                    const cumulativeValueGain = point?.cumulativeValueGain || '';
+                    return `${new Intl.NumberFormat('pt-BR', {
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }).format(value / 100)} (${cumulativeValueGain})`;
+                }
+            }
         },
         annotations: {
             yaxis: [
@@ -196,7 +153,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.loadingService.hide();
         this.initializeChartsOverview();
     }
     ngOnDestroy(): void {
@@ -233,6 +189,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
                         data: dailyReturns.map((item) => ({
                             x: new Date(item.priceDate).toISOString(),
                             y: item.cumulativeReturnPercent,
+                            cumulativeValueGain: new Intl.NumberFormat(
+                                'pt-BR',
+                                { style: 'currency', currency: 'BRL' },
+                            ).format(item.cumulativeValueGain),
                         })),
                     },
                 ];

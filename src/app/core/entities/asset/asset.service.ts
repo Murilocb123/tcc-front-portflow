@@ -17,7 +17,13 @@ export class AssetService extends EntitiesService<AssetDTO> {
     ) {
         super(http, router, '/api/assets', messageService, confirmationService);
     }
+    
     listAll(): any {
         return this.executeRequest<AssetDTO[]>(HttpMethod.GET, '/all');
     }
+    
+    listAllAvailable(): any {
+        return this.executeRequest<AssetDTO[]>(HttpMethod.GET, '/available');
+    }
+
 }

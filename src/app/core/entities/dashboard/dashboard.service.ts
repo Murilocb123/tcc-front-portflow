@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
-import { EntitiesService, HttpMethod, PageRequest } from '../entitie.service';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { PortfolioDailyReturnDTO } from './dto/portfolio-daily-return.dto';
+import { map, Observable, tap } from 'rxjs';
+import { EntitiesService, HttpMethod, PageRequest } from '../entitie.service';
 import { OverviewDashboardDTO } from './dto/overview-dashboard.dto';
+import { PortfolioAssetDailyReturnDTO } from './dto/portfolio-asset-daily-return.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -26,18 +26,21 @@ export class DashboardService extends EntitiesService<any> {
         );
     }
 
-    getPortfolioDailyReturns(): Observable<PortfolioDailyReturnDTO[]> {
-        return this.executeRequest<PortfolioDailyReturnDTO[]>(
+    getPortfolioAssetDailyReturns(idAsset:string): Observable<PortfolioAssetDailyReturnDTO[]> {
+        return this.executeRequest<PortfolioAssetDailyReturnDTO[]>(
             HttpMethod.GET,
-            '/portfolio-daily-returns',
+            '/portfolio-asset-daily-returns/'+ idAsset,
         ).pipe(
             map((event: any) =>
-            (event as PortfolioDailyReturnDTO[]).map(item => ({
-                ...item,
-                cumulativeReturnPercent: item.cumulativeReturnPercent >= 0
-                    ? Math.ceil(item.cumulativeReturnPercent * 100) / 100
-                    : Math.floor(item.cumulativeReturnPercent * 100) / 100,
-            }))
+                (event as PortfolioAssetDailyReturnDTO[]).map((item) => ({
+                    ...item,
+                    cumulativeReturnPercentAsset:
+                        item.cumulativeReturnPercentAsset >= 0
+                            ? Math.ceil(item.cumulativeReturnPercentAsset * 100) /
+                              100
+                            : Math.floor(item.cumulativeReturnPercentAsset * 100) /
+                              100,
+                })),
             ),
         );
     }
@@ -49,18 +52,23 @@ export class DashboardService extends EntitiesService<any> {
         ).pipe(
             map((event: any) => event as OverviewDashboardDTO),
             tap((data: OverviewDashboardDTO) => {
-                data.totalReturnPercent = data.totalReturnPercent >= 0
-                    ? Math.ceil(data.totalReturnPercent * 100) / 100
-                    : Math.floor(data.totalReturnPercent * 100) / 100;
+                data.totalReturnPercent =
+                    data.totalReturnPercent >= 0
+                        ? Math.ceil(data.totalReturnPercent * 100) / 100
+                        : Math.floor(data.totalReturnPercent * 100) / 100;
                 if (Array.isArray(data.dailyReturns)) {
-                    data.dailyReturns = data.dailyReturns.map(ret => ({
+                    data.dailyReturns = data.dailyReturns.map((ret) => ({
                         ...ret,
-                        cumulativeReturnPercent: ret.cumulativeReturnPercent >= 0
-                            ? Math.ceil(ret.cumulativeReturnPercent * 100) / 100
-                            : Math.floor(ret.cumulativeReturnPercent * 100) / 100
+                        cumulativeReturnPercent:
+                            ret.cumulativeReturnPercent >= 0
+                                ? Math.ceil(ret.cumulativeReturnPercent * 100) /
+                                  100
+                                : Math.floor(
+                                      ret.cumulativeReturnPercent * 100,
+                                  ) / 100,
                     }));
                 }
-            })
+            }),
         );
     }
 

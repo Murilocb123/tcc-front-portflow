@@ -1,1 +1,116 @@
-<p>detailed works!</p>
+<div class="grid">
+    <!-- Watchlist lateral -->
+
+    <div class="col-10">
+        <p-panel [style]="{ height: '615px' }">
+            <p-tabs value="rentabilidade">
+                <p-tablist>
+                    <p-tab value="rentabilidade">Rentabilidade</p-tab>
+                    <p-tab value="projecao">Projeção</p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel value="rentabilidade">
+                            <ng-container *ngIf="hasDailyReturn; else emptyDailyReturn">
+                                <div class="chart-container">
+                                    <apx-chart
+                                        *ngIf="hasDailyReturn"
+                                        [series]="
+                                            rentabilidadeAtivoOptions.series
+                                        "
+                                        [chart]="
+                                            rentabilidadeAtivoOptions.chart
+                                        "
+                                        [xaxis]="
+                                            rentabilidadeAtivoOptions.xaxis
+                                        "
+                                        [yaxis]="
+                                            rentabilidadeAtivoOptions.yaxis
+                                        "
+                                        [stroke]="
+                                            rentabilidadeAtivoOptions.stroke
+                                        "
+                                        [tooltip]="
+                                            rentabilidadeAtivoOptions.tooltip
+                                        "
+                                        [annotations]="
+                                            rentabilidadeAtivoOptions.annotations
+                                        "
+                                        [dataLabels]="
+                                            rentabilidadeAtivoOptions.dataLabels
+                                        "
+                                        [markers]="
+                                            rentabilidadeAtivoOptions.markers
+                                        "
+                                        [title]="
+                                            rentabilidadeAtivoOptions.title
+                                        "
+                                        [fill]="rentabilidadeAtivoOptions.fill"
+                                        [colors]="
+                                            rentabilidadeAtivoOptions.colors
+                                        "
+                                        [plotOptions]="
+                                            rentabilidadeAtivoOptions.options
+                                        "
+                                        [className]="'h-full'"
+                                    ></apx-chart>
+                                </div>
+                            </ng-container>
+                            <ng-template #emptyDailyReturn>
+                                <div
+                                    class="empty flex flex-column align-items-center justify-content-center"
+                                >
+                                    <i
+                                        class="pi pi-info-circle"
+                                        style="
+                                            font-size: 2rem;
+                                            color: var(--p-primary-color);
+                                        "
+                                    ></i>
+                                    <br />
+                                    Sem dados de renda. Cadastre eventos para
+                                    obter renda.
+                                </div>
+                            </ng-template>
+                   </p-tabpanel>
+                    <p-tabpanel value="projecao">
+                     
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </p-panel>
+    </div>
+    <div class="col-2">
+        <p-panel [style]="{ height: '615px' }">
+            <!-- Título do painel -->
+            <ng-template #header>
+                <div
+                    class="w-full flex justify-content-center align-items-start pt-0"
+                >
+                    <span
+                        class="vertical-align-top vertical-align-text-top text-lg"
+                        >Ativos na carteira</span
+                    >
+                </div>
+            </ng-template>
+            <p-listbox
+                [options]="filteredAtivos"
+                [(ngModel)]="ativoSelecionado"
+                (ngModelChange)="onAtivoSelecionadoChange()"
+                optionValue="value"
+                optionLabel="name"
+                [filter]="true"
+                filterBy="ticker,name"
+            >
+                <ng-template let-opt pTemplate="item">
+                    <div class="sym-row">
+                        <span class="font-semibold">{{ opt.ticker }}</span
+                        ><br />
+                        <span class="text-sm text-500 text-overflow-ellipsis">{{
+                            opt.name
+                        }}</span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </p-panel>
+    </div>
+</div>

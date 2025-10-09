@@ -8,115 +8,12 @@
             optionValue="value"
             aria-labelledby="basic"
             allowEmpty="false"
+            (onChange)="onValueSelectedChange()"
         ></p-selectbutton>
     </div>
 </p-panel>
 
 <!-- VISÃO GERAL -->
 <app-overview [hidden]="valueSelected !== 'overview'"/>
-
-
-
-
-
-
 <!-- VISÃO DETALHADA -->
-<!-- VISÃO DETALHADA (watchlist lateral estilo TradingView) -->
-<div *ngIf="valueSelected === 'detailed'" class="grid">
-    <!-- Watchlist lateral -->
-
-    <div class="col-10">
-        <!-- 
-        <p-panel>
-            
-            <p-tabs value="rentabilidade">
-                <p-tablist>
-                    <p-tab value="rentabilidade">Rentabilidade</p-tab>
-                    <p-tab value="projecao">Projeção</p-tab>
-                </p-tablist>
-                <p-tabpanels>
-                    <p-tabpanel value="rentabilidade">
-                        <p-panel
-                            header="Rentabilidade por Ativo"
-                            styleClass="card"
-                        >
-                            <div class="dashboard">
-                                <div class="chart-container">
-                                    <p-chart
-                                        type="line"
-                                        [data]="rentPorAtivoChartData"
-                                        [options]="rentPorAtivoChartOptions"
-                                        class="h-[30rem]"
-                                    ></p-chart>
-                                </div>
-                            </div>
-                        </p-panel>
-                    </p-tabpanel>
-                    <p-tabpanel value="projecao">
-                        <p-panel header="Previsão por Ativo" styleClass="card">
-                            <div class="dashboard">
-                                <div class="chart-container">
-                                    <p-chart
-                                        type="line"
-                                        [data]="forecastChartData"
-                                        [options]="forecastChartOptions"
-                                        style="height: 300px"
-                                    ></p-chart>
-                                </div>
-                            </div>
-                        </p-panel>
-                    </p-tabpanel>
-                </p-tabpanels>
-            </p-tabs>
-        </p-panel>
-    </div>
-    <div class="col-2">
-        <p-panel>
-            <ng-template #header>
-                <div
-                    class="w-full flex justify-content-center align-items-start pt-0"
-                >
-                    <span
-                        class="vertical-align-top vertical-align-text-top text-lg"
-                        >Ativos na carteira</span
-                    >
-                </div>
-            </ng-template>
-            <p-listbox
-                [options]="filteredAtivos"
-                [(ngModel)]="ativoSelecionado"
-                optionValue="value"
-                [filter]="true"
-                [listStyle]="{ 'max-height': '520px' }"
-                (onChange)="onAssetChange($event.value)"
-            >
-                <ng-template let-opt pTemplate="item">
-                    <div
-                        class="watch-item"
-                        [ngClass]="{ selected: opt.value === ativoSelecionado }"
-                    >
-                        <div class="sym-row">
-                            <span class="sym">{{ opt.value }}</span>
-                            <span class="name">{{ opt.name }}</span>
-                        </div>
-                        <div class="px-row">
-                            <span class="last">{{
-                                opt.last | number: '1.2-2'
-                            }}</span>
-                            <span
-                                class="chg"
-                                [ngClass]="{
-                                    up: opt.change >= 0,
-                                    down: opt.change < 0,
-                                }"
-                            >
-                                {{ opt.change >= 0 ? '+' : ''
-                                }}{{ opt.change | number: '1.2-2' }}%
-                            </span>
-                        </div>
-                    </div>
-                </ng-template>
-            </p-listbox>
-        </p-panel>
-    </div> -->
-</div>
+<app-detailed [hidden]="valueSelected !== 'detailed'"/>
